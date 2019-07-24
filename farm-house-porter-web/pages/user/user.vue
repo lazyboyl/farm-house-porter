@@ -1,6 +1,6 @@
-<template>  
-    <view class="container">  
-		
+<template>
+    <view class="container">
+
 		<view class="user-section">
 			<image class="bg" src="/static/user-bg.jpg"></image>
 			<view class="user-info-box">
@@ -24,8 +24,8 @@
 				<text class="e-b">开通会员开发无bug 一测就上线</text>
 			</view>
 		</view>
-		
-		<view 
+
+		<view
 			class="cover-container"
 			:style="[{
 				transform: coverTransform,
@@ -36,7 +36,7 @@
 			@touchend="coverTouchend"
 		>
 			<image class="arc" src="/static/arc.png"></image>
-			
+
 			<view class="tj-sction">
 				<view class="tj-item">
 					<text class="num" @click="testClick">128.8</text>
@@ -92,15 +92,17 @@
 				<list-cell icon="icon-shezhi1" iconColor="#e07472" title="设置" border="" @eventClick="navTo('/pages/set/set')"></list-cell>
 			</view>
 		</view>
-			
-		
-    </view>  
-</template>  
-<script>  
+
+
+    </view>
+</template>
+<script>
 	import listCell from '@/components/mix-list-cell';
-    import {  
-        mapState 
-    } from 'vuex';  
+    import {
+        mapState
+    } from 'vuex';
+    import uniRequest from 'uni-request';
+
 	let startY = 0, moveY = 0, pageAtTop = true;
     export default {
 		components: {
@@ -140,7 +142,12 @@
 		},
         methods: {
 			testClick(){
-				console.log('-----你点击了-----')
+                uniRequest.post('http://127.0.0.1:8080/address/getAddress',{
+                    addressId: 'assas'
+                }).then(res => {
+                    console.log(res.data);
+				})
+				console.log('-----你点击了1111-----')
 			},
 
 			/**
@@ -151,11 +158,11 @@
 				if(!this.hasLogin){
 					url = '/pages/public/login';
 				}
-				uni.navigateTo({  
+				uni.navigateTo({
 					url
-				})  
-			}, 
-	
+				})
+			},
+
 			/**
 			 *  会员卡下拉和回弹
 			 *  1.关闭bounce避免ios端下拉冲突
@@ -181,7 +188,7 @@
 				if(moveDistance >= 80 && moveDistance < 100){
 					moveDistance = 80;
 				}
-		
+
 				if(moveDistance > 0 && moveDistance <= 80){
 					this.coverTransform = `translateY(${moveDistance}px)`;
 				}
@@ -194,9 +201,9 @@
 				this.coverTransition = 'transform 0.3s cubic-bezier(.21,1.93,.53,.64)';
 				this.coverTransform = 'translateY(0px)';
 			}
-        }  
-    }  
-</script>  
+        }
+    }
+</script>
 <style lang='scss'>
 	%flex-center {
 	 display:flex;
@@ -373,5 +380,5 @@
 			}
 		}
 	}
-	
+
 </style>
