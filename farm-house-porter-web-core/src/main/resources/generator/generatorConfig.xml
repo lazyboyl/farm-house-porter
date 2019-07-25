@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+
+    <context id="Mysql" targetRuntime="MyBatis3Simple" defaultModelType="flat">
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+
+        <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
+            <property name="mappers" value="tk.mybatis.mapper.common.Mapper"/>
+            <!-- 是否区分大小写，默认值 false -->
+            <property name="caseSensitive" value="true"/>
+            <!-- 是否强制生成注解，默认 false，如果设置为 true，不管数据库名和字段名是否一致，都会生成注解（包含 @Table 和 @Column） -->
+            <property name="forceAnnotation" value="true"/>
+        </plugin>
+
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://127.0.0.1:3306/farm_house_porter?characterEncoding=utf-8"
+                        userId="root"
+                        password="123456">
+        </jdbcConnection>
+
+        <javaModelGenerator targetPackage="com.farm.house.porter.web.core.entity" targetProject="src/main/java">
+
+        </javaModelGenerator>
+
+        <sqlMapGenerator targetPackage="mybatis/mapper" targetProject="src/main/resources" />
+
+        <javaClientGenerator targetPackage="com.farm.house.porter.web.core.dao" targetProject="src/main/java"  type="XMLMAPPER"/>
+
+        <table tableName="t_address" domainObjectName="Address" mapperName="AddressDao">
+            <!-- 字段属性是否驼峰展示，true为驼峰展示 -->
+            <property name="useActualColumnNames" value="true"></property>
+            <generatedKey column="addressId" sqlStatement="JDBC"/>
+        </table>
+
+        <table tableName="t_cart" domainObjectName="Cart" mapperName="CartDao">
+            <!-- 字段属性是否驼峰展示，true为驼峰展示 -->
+            <property name="useActualColumnNames" value="true"></property>
+            <generatedKey column="cartId" sqlStatement="JDBC"/>
+        </table>
+
+        <table tableName="t_cart" domainObjectName="Cart" mapperName="CartDao">
+            <!-- 字段属性是否驼峰展示，true为驼峰展示 -->
+            <property name="useActualColumnNames" value="true"></property>
+            <generatedKey column="cartId" sqlStatement="JDBC"/>
+        </table>
+
+        <table tableName="t_consume_detail" domainObjectName="ConsumerDetail" mapperName="ConsumerDetailDao">
+            <!-- 字段属性是否驼峰展示，true为驼峰展示 -->
+            <property name="useActualColumnNames" value="true"></property>
+            <generatedKey column="consumerDetailId" sqlStatement="JDBC"/>
+        </table>
+
+        <table tableName="t_desc_info" domainObjectName="DescInfo" mapperName="DescInfoDao">
+            <!-- 字段属性是否驼峰展示，true为驼峰展示 -->
+            <property name="useActualColumnNames" value="true"></property>
+            <generatedKey column="descInfoId" sqlStatement="JDBC"/>
+        </table>
+
+        <table tableName="t_good" domainObjectName="Good" mapperName="GoodDao">
+            <!-- 字段属性是否驼峰展示，true为驼峰展示 -->
+            <property name="useActualColumnNames" value="true"></property>
+            <generatedKey column="goodId" sqlStatement="JDBC"/>
+        </table>
+
+        <table tableName="t_good_compare_specs" domainObjectName="GoodCompareSpecs" mapperName="GoodCompareSpecsDao">
+            <!-- 字段属性是否驼峰展示，true为驼峰展示 -->
+            <property name="useActualColumnNames" value="true"></property>
+            <generatedKey column="goodCompareSpecsId" sqlStatement="JDBC"/>
+        </table>
+
+        <table tableName="t_images" domainObjectName="Image" mapperName="ImageDao">
+            <!-- 字段属性是否驼峰展示，true为驼峰展示 -->
+            <property name="useActualColumnNames" value="true"></property>
+            <generatedKey column="imageId" sqlStatement="JDBC"/>
+        </table>
+
+        <table tableName="t_order" domainObjectName="Order" mapperName="OrderDao">
+            <!-- 字段属性是否驼峰展示，true为驼峰展示 -->
+            <property name="useActualColumnNames" value="true"></property>
+            <generatedKey column="orderId" sqlStatement="JDBC"/>
+        </table>
+
+        <table tableName="t_order_detail" domainObjectName="OrderDetail" mapperName="OrderDetailDao">
+            <!-- 字段属性是否驼峰展示，true为驼峰展示 -->
+            <property name="useActualColumnNames" value="true"></property>
+            <generatedKey column="orderDetailId" sqlStatement="JDBC"/>
+        </table>
+
+        <table tableName="t_product" domainObjectName="Product" mapperName="ProductDao">
+            <!-- 字段属性是否驼峰展示，true为驼峰展示 -->
+            <property name="useActualColumnNames" value="true"></property>
+            <generatedKey column="productId" sqlStatement="JDBC"/>
+        </table>
+
+        <table tableName="t_recharge" domainObjectName="Recharge" mapperName="RechargeDao">
+            <!-- 字段属性是否驼峰展示，true为驼峰展示 -->
+            <property name="useActualColumnNames" value="true"></property>
+            <generatedKey column="rechargeId" sqlStatement="JDBC"/>
+        </table>
+
+        <table tableName="t_user" domainObjectName="User" mapperName="UserDao">
+            <!-- 字段属性是否驼峰展示，true为驼峰展示 -->
+            <property name="useActualColumnNames" value="true"></property>
+            <generatedKey column="userId" sqlStatement="JDBC"/>
+        </table>
+
+    </context>
+</generatorConfiguration>

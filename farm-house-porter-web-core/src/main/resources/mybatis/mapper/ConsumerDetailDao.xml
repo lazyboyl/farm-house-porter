@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.farm.house.porter.web.core.dao.ConsumerDetailDao">
+  <resultMap id="BaseResultMap" type="com.farm.house.porter.web.core.entity.ConsumerDetail">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="consumeDetaiId" jdbcType="VARCHAR" property="consumeDetaiId" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="money" jdbcType="DOUBLE" property="money" />
+    <result column="consumeDate" jdbcType="TIMESTAMP" property="consumeDate" />
+    <result column="state" jdbcType="VARCHAR" property="state" />
+    <result column="crtUserId" jdbcType="VARCHAR" property="crtUserId" />
+    <result column="orderId" jdbcType="VARCHAR" property="orderId" />
+    <result column="rechargeId" jdbcType="VARCHAR" property="rechargeId" />
+    <result column="amountBefore" jdbcType="DOUBLE" property="amountBefore" />
+    <result column="amountAfter" jdbcType="DOUBLE" property="amountAfter" />
+  </resultMap>
+</mapper>

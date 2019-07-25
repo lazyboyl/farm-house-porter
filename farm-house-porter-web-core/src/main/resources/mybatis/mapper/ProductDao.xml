@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.farm.house.porter.web.core.dao.ProductDao">
+  <resultMap id="BaseResultMap" type="com.farm.house.porter.web.core.entity.Product">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="productId" jdbcType="VARCHAR" property="productId" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="state" jdbcType="VARCHAR" property="state" />
+    <result column="specsJson" jdbcType="VARCHAR" property="specsJson" />
+    <result column="crtDate" jdbcType="TIMESTAMP" property="crtDate" />
+  </resultMap>
+</mapper>

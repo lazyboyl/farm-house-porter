@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.farm.house.porter.web.core.dao.GoodCompareSpecsDao">
+  <resultMap id="BaseResultMap" type="com.farm.house.porter.web.core.entity.GoodCompareSpecs">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="goodCompareSpecsId" jdbcType="VARCHAR" property="goodCompareSpecsId" />
+    <result column="goodId" jdbcType="VARCHAR" property="goodId" />
+    <result column="productId" jdbcType="VARCHAR" property="productId" />
+    <result column="specs" jdbcType="VARCHAR" property="specs" />
+  </resultMap>
+</mapper>

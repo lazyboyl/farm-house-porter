@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.farm.house.porter.web.core.dao.AddressDao">
+  <resultMap id="BaseResultMap" type="com.farm.house.porter.web.core.entity.Address">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="addressId" jdbcType="VARCHAR" property="addressId" />
+    <result column="addressName" jdbcType="VARCHAR" property="addressName" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="defaule" jdbcType="VARCHAR" property="defaule" />
+    <result column="crtDate" jdbcType="TIMESTAMP" property="crtDate" />
+    <result column="crtUserId" jdbcType="VARCHAR" property="crtUserId" />
+    <result column="updateDate" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="updateUserId" jdbcType="VARCHAR" property="updateUserId" />
+  </resultMap>
+</mapper>

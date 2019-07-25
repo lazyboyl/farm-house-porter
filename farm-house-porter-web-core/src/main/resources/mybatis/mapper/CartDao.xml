@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.farm.house.porter.web.core.dao.CartDao">
+  <resultMap id="BaseResultMap" type="com.farm.house.porter.web.core.entity.Cart">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="cartId" jdbcType="VARCHAR" property="cartId" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="attrVal" jdbcType="VARCHAR" property="attrVal" />
+    <result column="price" jdbcType="DOUBLE" property="price" />
+    <result column="number" jdbcType="INTEGER" property="number" />
+    <result column="goodId" jdbcType="VARCHAR" property="goodId" />
+    <result column="image" jdbcType="VARCHAR" property="image" />
+    <result column="crtUserId" jdbcType="VARCHAR" property="crtUserId" />
+  </resultMap>
+</mapper>

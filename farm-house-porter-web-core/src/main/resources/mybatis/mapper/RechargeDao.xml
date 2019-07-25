@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.farm.house.porter.web.core.dao.RechargeDao">
+  <resultMap id="BaseResultMap" type="com.farm.house.porter.web.core.entity.Recharge">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="rechargeId" jdbcType="VARCHAR" property="rechargeId" />
+    <result column="money" jdbcType="DOUBLE" property="money" />
+    <result column="rechargeDate" jdbcType="TIMESTAMP" property="rechargeDate" />
+    <result column="state" jdbcType="VARCHAR" property="state" />
+  </resultMap>
+</mapper>
