@@ -101,7 +101,8 @@
     import {
         mapState
     } from 'vuex';
-    import uniRequest from 'uni-request';
+	import {http} from '../../lib/index.js'
+	import {getAddress} from '../../api/address/api.address.js'
 
 	let startY = 0, moveY = 0, pageAtTop = true;
     export default {
@@ -142,11 +143,11 @@
 		},
         methods: {
 			testClick(){
-                uniRequest.post('http://127.0.0.1:8080/address/getAddress',{
-                    addressId: 'assas'
-                }).then(res => {
-                    console.log(res.data);
-				})
+				getAddress({addressId: 'assas'}).then(res => {
+                     console.log('-----请求成功了---' + res)
+                }).catch(err => {
+                     console.log('-----请求出错了---')
+                })
 				console.log('-----你点击了1111-----')
 			},
 
