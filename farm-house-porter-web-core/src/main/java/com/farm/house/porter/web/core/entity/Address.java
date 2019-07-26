@@ -23,6 +23,12 @@ public class Address {
     private String addressName;
 
     /**
+     * 街道地址
+     */
+    @Column(name = "area")
+    private String area;
+
+    /**
      * 联系人
      */
     @Column(name = "name")
@@ -37,8 +43,8 @@ public class Address {
     /**
      * 是否为默认收货地址【1：默认；0：不默认】
      */
-    @Column(name = "defaule")
-    private String defaule;
+    @Column(name = "defaultAddress")
+    private String defaultAddress;
 
     /**
      * 创建时间
@@ -100,6 +106,14 @@ public class Address {
         this.addressName = addressName;
     }
 
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
     /**
      * 获取联系人
      *
@@ -136,22 +150,12 @@ public class Address {
         this.mobile = mobile;
     }
 
-    /**
-     * 获取是否为默认收货地址【1：默认；0：不默认】
-     *
-     * @return defaule - 是否为默认收货地址【1：默认；0：不默认】
-     */
-    public String getDefaule() {
-        return defaule;
+    public String getDefaultAddress() {
+        return defaultAddress;
     }
 
-    /**
-     * 设置是否为默认收货地址【1：默认；0：不默认】
-     *
-     * @param defaule 是否为默认收货地址【1：默认；0：不默认】
-     */
-    public void setDefaule(String defaule) {
-        this.defaule = defaule;
+    public void setDefaultAddress(String defaultAddress) {
+        this.defaultAddress = defaultAddress;
     }
 
     /**

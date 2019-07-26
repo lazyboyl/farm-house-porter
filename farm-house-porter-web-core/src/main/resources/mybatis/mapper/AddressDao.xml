@@ -2,17 +2,42 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.farm.house.porter.web.core.dao.AddressDao">
   <resultMap id="BaseResultMap" type="com.farm.house.porter.web.core.entity.Address">
-    <!--
-      WARNING - @mbg.generated
-    -->
     <id column="addressId" jdbcType="VARCHAR" property="addressId" />
     <result column="addressName" jdbcType="VARCHAR" property="addressName" />
+    <result column="area" jdbcType="VARCHAR" property="area" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="mobile" jdbcType="VARCHAR" property="mobile" />
-    <result column="defaule" jdbcType="VARCHAR" property="defaule" />
+    <result column="defaultAddress" jdbcType="VARCHAR" property="defaultAddress" />
     <result column="crtDate" jdbcType="TIMESTAMP" property="crtDate" />
     <result column="crtUserId" jdbcType="VARCHAR" property="crtUserId" />
     <result column="updateDate" jdbcType="TIMESTAMP" property="updateDate" />
     <result column="updateUserId" jdbcType="VARCHAR" property="updateUserId" />
   </resultMap>
+
+  <!-- 删除地址信息 -->
+  <delete id="deleteAddress">
+    delete from t_address where addressId = #{addressId} and crtUserId = #{userId}
+  </delete>
+
+  <!-- 更新地址信息 -->
+  <update id="updateAddress" parameterType="com.farm.house.porter.web.core.entity.Address">
+    update t_address set addressName = #{addressName},area = #{area},name=#{name},mobile=#{mobile},defaultAddress=#{defaultAddress},
+    updateDate = #{updateDate},updateUserId=#{updateUserId} where addressId = #{addressId}
+  </update>
+
+  <!-- 获取我的地址信息 -->
+  <select id="getMyAddressByAddressId" resultMap="BaseResultMap">
+    select * from t_address where addressId = #{addressId} and crtUserId = #{userId}
+  </select>
+
+  <!-- 根据当前用户的ID来设置当前用户底下的其他地址数据的默认状态 -->
+  <update id="updateAddressDefault">
+    update t_address set defaultAddress = #{defaultAddress} where crtUserId = #{userId}
+  </update>
+
+  <!-- 根据当前登录的用户来获取用户的地址列表 -->
+  <select id="getMyAddressList" resultMap="BaseResultMap">
+    select * from t_address where crtUserId = #{userId}
+  </select>
+
 </mapper>

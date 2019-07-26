@@ -22,13 +22,16 @@
 		
 		<view class="row default-row">
 			<text class="tit">设为默认</text>
-			<switch :checked="addressData.defaule" color="#fa436a" @change="switchChange" />
+			<switch :checked="addressData.defaultAddress=='1'" color="#fa436a" @change="switchChange" />
 		</view>
-		<button class="add-btn" @click="confirm">提交</button>
+		<button type="primary" class="add-btn" @click="confirm">提交</button>
+		<button type="warn" class="add-btn" v-if="deleteBtnShow" @click="deleteAddress" >删除</button>
 	</view>
 </template>
 
 <script>
+	import {addAddress,updateAddress,deleteAddress} from '../../api/address/api.address.js'
+	
 	export default {
 		data() {
 			return {
@@ -38,16 +41,18 @@
 					addressName: '在地图选择',
 					address: '',
 					area: '',
-					default: false
-				}
+					defaultAddress: '0'
+				},
+				deleteBtnShow: false
 			}
 		},
 		onLoad(option){
 			let title = '新增收货地址';
 			if(option.type==='edit'){
 				title = '编辑收货地址'
-				
 				this.addressData = JSON.parse(option.data)
+				this.addressData.address = this.addressData.addressName;
+				this.deleteBtnShow = true;
 			}
 			this.manageType = option.type;
 			uni.setNavigationBarTitle({
@@ -56,19 +61,47 @@
 		},
 		methods: {
 			switchChange(e){
-				this.addressData.default = e.detail;
+				if(e.detail){
+					this.addressData.defaultAddress = '1';
+				}else{
+					this.addressData.defaultAddress = '0';
+				}
 			},
-			
 			//地图选择地址
 			chooseLocation(){
 				uni.chooseLocation({
 					success: (data)=> {
-						this.addressData.addressName = data.name;
-						this.addressData.address = data.name;
+						console.log(JSON.stringify(data))
+						this.addressData.addressName = data.address;
+						this.addressData.address = data.address;
 					}
 				})
 			},
-			
+			deleteAddress(){
+				let addressId = this.addressData.addressId;
+				let _this = this;
+				uni.showModal({
+                   title: '提示',
+                   content: '是否删除当前的地址？',
+                   success: function (res) {
+                       if (res.confirm) {
+                           deleteAddress({addressId:addressId}).then(res=>{
+                           	if(res.code==200){
+                           		_this.$api.prePage().refreshList();
+                           		_this.$api.msg(res.msg);
+                           		setTimeout(()=>{
+                           			uni.navigateBack()
+                           		}, 800)
+                           	}else{
+                           		_this.$api.msg(res.msg);
+                           	}
+                           }).catch(err => {
+                           	    _this.$api.msg(err);
+                           })
+                       } 
+                   }
+                });
+			},
 			//提交
 			confirm(){
 				let data = this.addressData;
@@ -88,13 +121,38 @@
 					this.$api.msg('请填写门牌号信息');
 					return;
 				}
-				
+				// 表示当前为修改数据
+				if(this.manageType!='edit'){
+					addAddress(data).then(res => {
+						if(res.code==200){
+							this.$api.prePage().refreshList();
+							this.$api.msg(`地址${this.manageType=='edit' ? '修改': '添加'}成功`);
+							setTimeout(()=>{
+								uni.navigateBack()
+							}, 800)
+						}else{
+							this.$api.msg(res.msg);
+						}
+					}).catch(err => {
+						this.$api.msg(err);
+					})
+				}else{
+					updateAddress(data).then(res => {
+						if(res.code==200){
+							this.$api.prePage().refreshList();
+							this.$api.msg(`地址${this.manageType=='edit' ? '修改': '添加'}成功`);
+							setTimeout(()=>{
+								uni.navigateBack()
+							}, 800)
+						}else{
+							this.$api.msg(res.msg);
+						}
+					}).catch(err => {
+						this.$api.msg(err);
+					})
+				}
 				//this.$api.prePage()获取上一页实例，可直接调用上页所有数据和方法，在App.vue定义
-				this.$api.prePage().refreshList(data, this.manageType);
-				this.$api.msg(`地址${this.manageType=='edit' ? '修改': '添加'}成功`);
-				setTimeout(()=>{
-					uni.navigateBack()
-				}, 800)
+				
 			},
 		}
 	}
