@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2019/7/25 22:00:42                           */
+/* Created on:     2019/7/28 23:14:57                           */
 /*==============================================================*/
 
 
@@ -35,9 +35,10 @@ create table t_address
 (
    addressId            varchar(32) not null comment '地址流水ID',
    addressName          varchar(200) comment '详细地址',
+   area                 varchar(200) comment '街道地址',
    name                 varchar(100) comment '联系人',
    mobile               varchar(20) comment '手机号码',
-   defaule              varchar(2) comment '是否为默认收货地址【1：默认；0：不默认】',
+   defaultAddress       varchar(2) comment '是否为默认收货地址【1：默认；0：不默认】',
    crtDate              datetime comment '创建时间',
    crtUserId            varchar(32) comment '创建人ID',
    updateDate           datetime comment '更新时间',
@@ -143,6 +144,7 @@ create table t_image
    imageId              varchar(32) not null comment '图片流水ID',
    image                varchar(100) comment '图片地址',
    goodId               varchar(32) comment '商品ID',
+   type                 varchar(2) comment '图片类型【1：展示的图片；2：图文详情】',
    primary key (imageId)
 );
 
