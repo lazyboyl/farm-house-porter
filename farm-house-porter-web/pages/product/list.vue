@@ -23,12 +23,12 @@
 				@click="navToDetailPage(item)"
 			>
 				<view class="image-wrapper">
-					<image :src="item.image" mode="aspectFill"></image>
+					<image :src="'http://127.0.0.1/fhp' + item.image" mode="aspectFill"></image>
 				</view>
 				<text class="title clamp">{{item.title}}</text>
 				<view class="price-box">
 					<text class="price">{{item.price}}</text>
-					<text>已售 {{item.sales}}</text>
+					<text>已售 {{item.totalSales}}</text>
 				</view>
 			</view>
 		</view>
@@ -56,6 +56,8 @@
 
 <script>
 	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
+	import {queryGoodList} from '../../api/good/api.good.js';
+	import {loadCategory} from '../../api/category/api.category.js'
 	export default {
 		components: {
 			uniLoadMore	
@@ -70,11 +72,16 @@
 				cateId: 0, //已选三级分类id
 				priceOrder: 0, //1 价格从低到高 2价格从高到低
 				cateList: [],
-				goodsList: []
+				goodsList: [],
+				current: 1, // 当前页面
+				pageSize: 6,// 每次加载页数
+				type: '', // 需要查询的商品的类型
+				orderBy: '' // 排序方式
 			};
 		},
 		
 		onLoad(options){
+			this.type = options.fullPath;
 			// #ifdef H5
 			this.headerTop = document.getElementsByTagName('uni-page-head')[0].offsetHeight+'px';
 			// #endif
@@ -101,14 +108,20 @@
 		methods: {
 			//加载分类
 			async loadCateList(fid, sid){
-				let list = await this.$api.json('cateList');
-				let cateList = list.filter(item=>item.pid == fid);
-				
-				cateList.forEach(item=>{
-					let tempList = list.filter(val=>val.pid == item.id);
-					item.child = tempList;
+				let _this = this;
+				loadCategory({}).then(res=>{
+					if(res.code==200){
+						let list = res.obj;
+						let cateList = list.filter(item=>item.pId == fid);
+						cateList.forEach(item=>{
+							let tempList = list.filter(val=>val.pId == item.id);
+							item.child = tempList;
+						})
+						_this.cateList = cateList;
+					}
+				}).catch(err => {
+					this.$api.msg(err);
 				})
-				this.cateList = cateList;
 			},
 			//加载商品 ，带下拉刷新和上滑加载
 			async loadData(type='add', loading) {
@@ -121,35 +134,55 @@
 				}else{
 					this.loadingType = 'more'
 				}
-				
-				let goodsList = await this.$api.json('goodsList');
-				if(type === 'refresh'){
-					this.goodsList = [];
+				//筛选，综合排序直接使用发布时间和商品的销量作为排序
+				if(this.filterIndex === 0){
+					this.orderBy = 'tg.publicTime desc , tg.sales desc ';
 				}
-				//筛选，测试数据直接前端筛选了
+				//筛选，商品的销量作为排序
 				if(this.filterIndex === 1){
-					goodsList.sort((a,b)=>b.sales - a.sales)
+					this.orderBy = 'tg.sales desc';
 				}
+				// 商品的价格作为排序方式
 				if(this.filterIndex === 2){
-					goodsList.sort((a,b)=>{
-						if(this.priceOrder == 1){
-							return a.price - b.price;
-						}
-						return b.price - a.price;
-					})
-				}
-				
-				this.goodsList = this.goodsList.concat(goodsList);
-				
-				//判断是否还有下一页，有是more  没有是nomore(测试数据判断大于20就没有了)
-				this.loadingType  = this.goodsList.length > 20 ? 'nomore' : 'more';
-				if(type === 'refresh'){
-					if(loading == 1){
-						uni.hideLoading()
-					}else{
-						uni.stopPullDownRefresh();
+					// priceOrder为1则价格从低到高，为2则价格从高到低
+					if(this.priceOrder == '1'){
+						this.orderBy = 'tg.discountPrice asc';
+					}else if(this.priceOrder == '2'){
+						this.orderBy = 'tg.discountPrice desc';
 					}
+					
 				}
+				let _this = this;
+				queryGoodList({
+					"current": this.current, // 第几页
+      			    "pageSize": this.pageSize,// 每页加载多少条数据
+					"type": this.type,// 需要查询的商品类型
+					"orderBy": this.orderBy // 排序方式
+				}).then(res=>{
+					if(res.code==200){
+						_this.goodsList = res.obj.rows;
+						// 表示当前数据库已经没有数据了
+						if(_this.current * _this.pageSize >= res.obj.total){
+							_this.loadingType = 'nomore';
+						}else{
+							_this.loadingType = 'more';
+						}
+						if(type === 'refresh'){
+							if(loading == 1){
+								uni.hideLoading()
+							}else{
+								uni.stopPullDownRefresh();
+							}
+						}
+						_this.current = _this.current + 1;
+					}else{
+						this.$api.msg(res.msg);
+					}
+				}).catch(err => {
+					this.$api.msg(err);
+				})
+				
+				
 			},
 			//筛选点击
 			tabClick(index){

@@ -2,9 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.farm.house.porter.web.core.dao.GoodDao">
   <resultMap id="BaseResultMap" type="com.farm.house.porter.web.core.entity.Good">
-    <!--
-      WARNING - @mbg.generated
-    -->
     <id column="goodId" jdbcType="VARCHAR" property="goodId" />
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="discountPrice" jdbcType="DOUBLE" property="discountPrice" />
@@ -12,11 +9,28 @@
     <result column="couponTip" jdbcType="DOUBLE" property="couponTip" />
     <result column="store" jdbcType="INTEGER" property="store" />
     <result column="sales" jdbcType="INTEGER" property="sales" />
-    <result column="pageViews" jdbcType="INTEGER" property="pageViews" />
     <result column="defaultImage" jdbcType="VARCHAR" property="defaultImage" />
     <result column="goodNorms" jdbcType="VARCHAR" property="goodNorms" />
     <result column="produceId" jdbcType="VARCHAR" property="produceId" />
     <result column="state" jdbcType="VARCHAR" property="state" />
     <result column="publicTime" jdbcType="TIMESTAMP" property="publicTime" />
   </resultMap>
+
+  <resultMap id="GoodListMap" type="com.farm.house.porter.web.core.vo.GoodListVo">
+    <id column="goodId" jdbcType="VARCHAR" property="goodId" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="price" jdbcType="DOUBLE" property="price" />
+    <result column="totalSales" jdbcType="INTEGER" property="totalSales" />
+    <result column="image" jdbcType="VARCHAR" property="image" />
+  </resultMap>
+
+  <!-- 查询商品的列表数据 -->
+  <select id="queryGoodList" resultMap="GoodListMap">
+    select tg.title,tg.discountPrice,tg.defaultImage as image,tg.goodId,tg.sales as totalSales,tg.discountPrice as price from t_product tp inner join t_good tg
+    on tp.productId = tg.produceId where 1=1
+    <if test="type!=null and type!=''">
+        and tp.type like concat(#{type},'%')
+    </if>
+  </select>
+
 </mapper>

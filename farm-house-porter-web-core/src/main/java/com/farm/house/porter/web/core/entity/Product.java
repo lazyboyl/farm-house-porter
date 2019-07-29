@@ -29,6 +29,18 @@ public class Product {
     private String type;
 
     /**
+     * 总销量
+     */
+    @Column(name = "totalSales")
+    private Integer totalSales;
+
+    /**
+     * 浏览量
+     */
+    @Column(name = "pageViews")
+    private Integer pageViews;
+
+    /**
      * 产品状态
      */
     @Column(name = "state")
@@ -42,6 +54,22 @@ public class Product {
 
     @Column(name = "crtDate")
     private Date crtDate;
+
+    public Integer getTotalSales() {
+        return totalSales;
+    }
+
+    public void setTotalSales(Integer totalSales) {
+        this.totalSales = totalSales;
+    }
+
+    public Integer getPageViews() {
+        return pageViews;
+    }
+
+    public void setPageViews(Integer pageViews) {
+        this.pageViews = pageViews;
+    }
 
     /**
      * 获取产品流水ID

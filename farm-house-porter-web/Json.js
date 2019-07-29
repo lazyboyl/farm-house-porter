@@ -356,7 +356,7 @@ const orderList = [{
 			price: 179.5,
 			image: 'https://img13.360buyimg.com/n8/jfs/t1/30343/20/1029/481370/5c449438Ecb46a15b/2b2adccb6dc742fd.jpg',
 			number: 1,
-			attr: '珊瑚粉 M'
+            attr: '珊瑚粉 M'
 		}]
 	},
 	{

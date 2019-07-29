@@ -52,11 +52,6 @@ public class Good {
     @Column(name = "sales")
     private Integer sales;
 
-    /**
-     * 浏览量
-     */
-    @Column(name = "pageViews")
-    private Integer pageViews;
 
     /**
      * 默认商品图片地址
@@ -214,23 +209,6 @@ public class Good {
         this.sales = sales;
     }
 
-    /**
-     * 获取浏览量
-     *
-     * @return pageViews - 浏览量
-     */
-    public Integer getPageViews() {
-        return pageViews;
-    }
-
-    /**
-     * 设置浏览量
-     *
-     * @param pageViews 浏览量
-     */
-    public void setPageViews(Integer pageViews) {
-        this.pageViews = pageViews;
-    }
 
     /**
      * 获取默认商品图片地址
