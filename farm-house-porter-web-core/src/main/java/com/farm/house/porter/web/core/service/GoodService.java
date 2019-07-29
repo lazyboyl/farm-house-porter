@@ -4,6 +4,7 @@ import com.farm.house.porter.web.core.base.Page;
 import com.farm.house.porter.web.core.base.ReturnInfo;
 import com.farm.house.porter.web.core.base.SystemStaticConst;
 import com.farm.house.porter.web.core.constant.ImageConstant;
+import com.farm.house.porter.web.core.dao.DescInfoDao;
 import com.farm.house.porter.web.core.dao.GoodDao;
 import com.farm.house.porter.web.core.dao.ImageDao;
 import com.farm.house.porter.web.core.dao.ProductDao;
@@ -47,6 +48,12 @@ public class GoodService {
     private ImageDao imageDao;
 
     /**
+     * 产品的图片的dao
+     */
+    @Autowired
+    private DescInfoDao descInfoDao;
+
+    /**
      * 功能描述：根据商品ID来获取商品数据
      *
      * @param goodId 商品ID
@@ -69,7 +76,7 @@ public class GoodService {
         // 获取轮播图文信息
         goodInfoVo.setCarouselImagesList(imageDao.queryImageById(good.getGoodId(), ImageConstant.TYPE_PROJECT_SHOW));
         // 获取图片详情信息
-        goodInfoVo.setGoodImages(imageDao.queryImageById(good.getGoodId(), ImageConstant.TYPE_PROJECT_DETAIL));
+        goodInfoVo.setGoodImages(descInfoDao.queryProductImageById(product.getProductId()));
         return new ReturnInfo(SystemStaticConst.SUCCESS, "获取商品信息成功！", goodInfoVo);
     }
 

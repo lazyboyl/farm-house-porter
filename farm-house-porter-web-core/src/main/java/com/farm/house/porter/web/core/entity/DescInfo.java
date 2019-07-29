@@ -5,6 +5,11 @@ import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.*;
 
+/**
+ * @author linzf
+ * @since 2019-07-29
+ * 类描述：产品图文描述
+ */
 @Table(name = "t_desc_info")
 public class DescInfo {
     /**

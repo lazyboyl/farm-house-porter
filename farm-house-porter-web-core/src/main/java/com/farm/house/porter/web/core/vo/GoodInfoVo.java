@@ -1,5 +1,6 @@
 package com.farm.house.porter.web.core.vo;
 
+import com.farm.house.porter.web.core.entity.DescInfo;
 import com.farm.house.porter.web.core.entity.Good;
 import com.farm.house.porter.web.core.entity.Image;
 
@@ -86,7 +87,7 @@ public class GoodInfoVo {
     /**
      * 图文详情
      */
-    private List<Image> goodImages;
+    private List<DescInfo> goodImages;
 
     public String getGoodNorms() {
         return goodNorms;
@@ -176,11 +177,11 @@ public class GoodInfoVo {
         this.carouselImagesList = carouselImagesList;
     }
 
-    public List<Image> getGoodImages() {
+    public List<DescInfo> getGoodImages() {
         return goodImages;
     }
 
-    public void setGoodImages(List<Image> goodImages) {
+    public void setGoodImages(List<DescInfo> goodImages) {
         this.goodImages = goodImages;
     }
 }
