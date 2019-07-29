@@ -2,12 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.farm.house.porter.web.core.dao.ImageDao">
   <resultMap id="BaseResultMap" type="com.farm.house.porter.web.core.entity.Image">
-    <!--
-      WARNING - @mbg.generated
-    -->
     <id column="imageId" jdbcType="VARCHAR" property="imageId" />
     <result column="image" jdbcType="VARCHAR" property="image" />
     <result column="goodId" jdbcType="VARCHAR" property="goodId" />
     <result column="type" jdbcType="VARCHAR" property="type" />
   </resultMap>
+
+  <!-- 根据id和图片类型来获取图片数据集合 -->
+  <select id="queryImageById" resultMap="BaseResultMap">
+    select * from t_image where goodId = #{goodId} and type = #{type}
+  </select>
+
 </mapper>

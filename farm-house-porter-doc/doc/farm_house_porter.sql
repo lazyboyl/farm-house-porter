@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : 本地
-Source Server Version : 80012
+Source Server         : 127.0.0.1
+Source Server Version : 50720
 Source Host           : 127.0.0.1:3306
 Source Database       : farm_house_porter
 
 Target Server Type    : MYSQL
-Target Server Version : 80012
+Target Server Version : 50720
 File Encoding         : 65001
 
-Date: 2019-07-29 17:29:45
+Date: 2019-07-29 21:06:42
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -20,18 +20,18 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 DROP TABLE IF EXISTS `t_address`;
 CREATE TABLE `t_address` (
-  `addressId` varchar(32) COLLATE utf8mb4_general_ci NOT NULL COMMENT '地址流水ID',
-  `addressName` varchar(200) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '详细地址',
-  `area` varchar(200) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '街道地址',
-  `name` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '联系人',
-  `mobile` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '手机号码',
-  `defaultAddress` varchar(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '鏄惁涓洪粯璁ゆ敹璐у湴鍧€銆?锛氶粯璁わ紱0锛氫笉榛樿銆?',
+  `addressId` varchar(32) NOT NULL COMMENT '地址流水ID',
+  `addressName` varchar(200) DEFAULT NULL COMMENT '详细地址',
+  `area` varchar(200) DEFAULT NULL COMMENT '街道地址',
+  `name` varchar(100) DEFAULT NULL COMMENT '联系人',
+  `mobile` varchar(20) DEFAULT NULL COMMENT '手机号码',
+  `defaultAddress` varchar(2) DEFAULT NULL COMMENT '鏄惁涓洪粯璁ゆ敹璐у湴鍧€銆?锛氶粯璁わ紱0锛氫笉榛樿銆?',
   `crtDate` datetime DEFAULT NULL COMMENT '创建时间',
-  `crtUserId` varchar(32) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '创建人ID',
+  `crtUserId` varchar(32) DEFAULT NULL COMMENT '创建人ID',
   `updateDate` datetime DEFAULT NULL COMMENT '更新时间',
-  `updateUserId` varchar(32) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '更新人ID',
+  `updateUserId` varchar(32) DEFAULT NULL COMMENT '更新人ID',
   PRIMARY KEY (`addressId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='用户的地址维护表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户的地址维护表';
 
 -- ----------------------------
 -- Records of t_address
@@ -44,16 +44,16 @@ INSERT INTO `t_address` VALUES ('53182da04c554313ab8604a9a2298edb', '福建省�
 -- ----------------------------
 DROP TABLE IF EXISTS `t_cart`;
 CREATE TABLE `t_cart` (
-  `cartId` varchar(32) COLLATE utf8mb4_general_ci NOT NULL COMMENT '购物车流水ID',
-  `title` varchar(200) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '商品标题',
-  `attrVal` varchar(200) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '商品规格描述',
+  `cartId` varchar(32) NOT NULL COMMENT '购物车流水ID',
+  `title` varchar(200) DEFAULT NULL COMMENT '商品标题',
+  `attrVal` varchar(200) DEFAULT NULL COMMENT '商品规格描述',
   `price` double DEFAULT NULL COMMENT '商品价格',
   `number` int(11) DEFAULT NULL COMMENT '购买数量',
-  `goodId` varchar(32) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '商品ID',
-  `image` varchar(200) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '商品图片地址',
-  `crtUserId` varchar(32) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '所属用户ID',
+  `goodId` varchar(32) DEFAULT NULL COMMENT '商品ID',
+  `image` varchar(200) DEFAULT NULL COMMENT '商品图片地址',
+  `crtUserId` varchar(32) DEFAULT NULL COMMENT '所属用户ID',
   PRIMARY KEY (`cartId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='用户的购物车信息表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户的购物车信息表';
 
 -- ----------------------------
 -- Records of t_cart
@@ -66,11 +66,11 @@ DROP TABLE IF EXISTS `t_category`;
 CREATE TABLE `t_category` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '分类流水ID',
   `pId` int(11) DEFAULT NULL COMMENT '分类流水父ID',
-  `picture` varchar(200) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '图片地址',
-  `name` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '名称',
-  `fullPath` varchar(200) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '分类完全路径',
+  `picture` varchar(200) DEFAULT NULL COMMENT '图片地址',
+  `name` varchar(50) DEFAULT NULL COMMENT '名称',
+  `fullPath` varchar(200) DEFAULT NULL COMMENT '分类完全路径',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of t_category
@@ -123,18 +123,18 @@ INSERT INTO `t_category` VALUES ('46', '36', '/static/temp/cate24.jpg', '围兜'
 -- ----------------------------
 DROP TABLE IF EXISTS `t_consume_detail`;
 CREATE TABLE `t_consume_detail` (
-  `consumeDetaiId` varchar(32) COLLATE utf8mb4_general_ci NOT NULL COMMENT '消费明细流水ID',
-  `type` varchar(2) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '消费类型【1：充值；2：购物】',
+  `consumeDetaiId` varchar(32) NOT NULL COMMENT '消费明细流水ID',
+  `type` varchar(2) DEFAULT NULL COMMENT '消费类型【1：充值；2：购物】',
   `money` double DEFAULT NULL COMMENT '金额',
   `consumeDate` datetime DEFAULT NULL COMMENT '消费时间',
-  `state` varchar(2) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '状态【0：消费失败；1：正常；】',
-  `crtUserId` varchar(32) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '消费用户流水ID',
-  `orderId` varchar(32) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '关联订单ID',
-  `rechargeId` varchar(32) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '充值订单ID',
+  `state` varchar(2) DEFAULT NULL COMMENT '状态【0：消费失败；1：正常；】',
+  `crtUserId` varchar(32) DEFAULT NULL COMMENT '消费用户流水ID',
+  `orderId` varchar(32) DEFAULT NULL COMMENT '关联订单ID',
+  `rechargeId` varchar(32) DEFAULT NULL COMMENT '充值订单ID',
   `amountBefore` double DEFAULT NULL COMMENT '消费前账户金额',
   `amountAfter` double DEFAULT NULL COMMENT '消费后账户金额',
   PRIMARY KEY (`consumeDetaiId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='记录用户消费的明细信息';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='记录用户消费的明细信息';
 
 -- ----------------------------
 -- Records of t_consume_detail
@@ -145,11 +145,11 @@ CREATE TABLE `t_consume_detail` (
 -- ----------------------------
 DROP TABLE IF EXISTS `t_desc_info`;
 CREATE TABLE `t_desc_info` (
-  `descImageId` varchar(32) COLLATE utf8mb4_general_ci NOT NULL COMMENT '流水ID',
-  `productId` varchar(32) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '产品流水ID',
-  `image` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '图片地址',
+  `descImageId` varchar(32) NOT NULL COMMENT '流水ID',
+  `productId` varchar(32) DEFAULT NULL COMMENT '产品流水ID',
+  `image` varchar(100) DEFAULT NULL COMMENT '图片地址',
   PRIMARY KEY (`descImageId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='产品图文详情';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='产品图文详情';
 
 -- ----------------------------
 -- Records of t_desc_info
@@ -160,20 +160,20 @@ CREATE TABLE `t_desc_info` (
 -- ----------------------------
 DROP TABLE IF EXISTS `t_good`;
 CREATE TABLE `t_good` (
-  `goodId` varchar(32) COLLATE utf8mb4_general_ci NOT NULL COMMENT '商品流水ID',
-  `title` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '商品名称',
+  `goodId` varchar(32) NOT NULL COMMENT '商品流水ID',
+  `title` varchar(100) DEFAULT NULL COMMENT '商品名称',
   `discountPrice` double DEFAULT NULL COMMENT '优惠价格',
   `price` double DEFAULT NULL COMMENT '商品价格',
   `couponTip` double DEFAULT NULL COMMENT '折扣',
   `store` int(11) DEFAULT NULL COMMENT '商品库存',
   `sales` int(11) DEFAULT NULL COMMENT '销量',
-  `defaultImage` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '默认商品图片地址',
-  `goodNorms` varchar(500) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '商品规格保存的数据为JSON格式的数据',
-  `produceId` varchar(32) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '产品流水ID',
-  `state` varchar(2) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '商品状态',
+  `defaultImage` varchar(100) DEFAULT NULL COMMENT '默认商品图片地址',
+  `goodNorms` varchar(500) DEFAULT NULL COMMENT '商品规格保存的数据为JSON格式的数据',
+  `produceId` varchar(32) DEFAULT NULL COMMENT '产品流水ID',
+  `state` varchar(2) DEFAULT NULL COMMENT '商品状态',
   `publicTime` datetime DEFAULT NULL COMMENT '发布时间',
   PRIMARY KEY (`goodId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='用于存放商品信息';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用于存放商品信息';
 
 -- ----------------------------
 -- Records of t_good
@@ -182,18 +182,22 @@ INSERT INTO `t_good` VALUES ('1', '古黛妃 短袖t恤女夏装xl白色', '179'
 INSERT INTO `t_good` VALUES ('2', '古黛妃 短袖t恤女夏装xxl白色', '185', '185', '100', '50', '80', '/goods/2/1.jpg', '{\"尺寸\":\"xxl\",\"颜色\":\"白色\"}', '1', '1', '2019-07-29 14:19:52');
 INSERT INTO `t_good` VALUES ('3', '古黛妃 短袖t恤女夏装xl蓝色', '195', '195', '100', '40', '90', '/goods/3/1.jpg', '{\"尺寸\":\"xl\",\"颜色\":\"蓝色\"}', '1', '1', '2019-07-29 14:21:16');
 INSERT INTO `t_good` VALUES ('4', '古黛妃 短袖t恤女夏装xxl蓝色', '520', '520', '100', '10', '900', '/goods/4/1.jpg', '{\"尺寸\":\"xxl\",\"颜色\":\"蓝色\"}', '1', '1', '2019-07-29 14:27:52');
+INSERT INTO `t_good` VALUES ('5', '上装连衣裙xl黑色', '800', '800', '100', '70', '70', '/goods/5/1.jpg', '{\"尺寸\":\"xl\",\"颜色\":\"黑色\"}', '2', '1', '2019-07-29 19:59:35');
+INSERT INTO `t_good` VALUES ('6', '上装连衣裙xxl绿色', '900', '900', '100', '41', '30', '/goods/6/1.jpg', '{\"尺寸\":\"xxl\",\"颜色\":\"绿色\"}', '2', '1', '2019-07-29 20:00:22');
+INSERT INTO `t_good` VALUES ('7', '上装连衣裙xxl黑色', '700', '700', '100', '44', '32', '/goods/7/1.jpg', '{\"尺寸\":\"xxl\",\"颜色\":\"黑色\"}', '2', '1', '2019-07-29 20:01:15');
+INSERT INTO `t_good` VALUES ('8', '上装连衣裙xl绿色', '701', '701', '100', '52', '87', '/goods/8/1.jpg', '{\"尺寸\":\"xl\",\"颜色\":\"绿色\"}', '2', '1', '2019-07-29 20:01:51');
 
 -- ----------------------------
 -- Table structure for `t_good_compare_specs`
 -- ----------------------------
 DROP TABLE IF EXISTS `t_good_compare_specs`;
 CREATE TABLE `t_good_compare_specs` (
-  `goodCompareSpecsId` varchar(32) COLLATE utf8mb4_general_ci NOT NULL COMMENT '商品与规格的对照关系流水ID',
-  `goodId` varchar(32) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '商品ID',
-  `productId` varchar(32) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '产品ID',
-  `specs` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '规格信息',
+  `goodCompareSpecsId` varchar(32) NOT NULL COMMENT '商品与规格的对照关系流水ID',
+  `goodId` varchar(32) DEFAULT NULL COMMENT '商品ID',
+  `productId` varchar(32) DEFAULT NULL COMMENT '产品ID',
+  `specs` varchar(100) DEFAULT NULL COMMENT '规格信息',
   PRIMARY KEY (`goodCompareSpecsId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='商品与规格的对照关系表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商品与规格的对照关系表';
 
 -- ----------------------------
 -- Records of t_good_compare_specs
@@ -205,12 +209,12 @@ INSERT INTO `t_good_compare_specs` VALUES ('1', '1', '1', 'xl,白色');
 -- ----------------------------
 DROP TABLE IF EXISTS `t_image`;
 CREATE TABLE `t_image` (
-  `imageId` varchar(32) COLLATE utf8mb4_general_ci NOT NULL COMMENT '图片流水ID',
-  `image` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '图片地址',
-  `goodId` varchar(32) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '商品ID',
-  `type` varchar(2) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `imageId` varchar(32) NOT NULL COMMENT '图片流水ID',
+  `image` varchar(100) DEFAULT NULL COMMENT '图片地址',
+  `goodId` varchar(32) DEFAULT NULL COMMENT '商品ID',
+  `type` varchar(2) DEFAULT NULL,
   PRIMARY KEY (`imageId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='维护所有商品的图片信息';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='维护所有商品的图片信息';
 
 -- ----------------------------
 -- Records of t_image
@@ -219,31 +223,43 @@ INSERT INTO `t_image` VALUES ('1', '/goods/1/1.jpg', '1', '1');
 INSERT INTO `t_image` VALUES ('10', '/goods/4/1.jpg', '4', '1');
 INSERT INTO `t_image` VALUES ('11', '/goods/4/2.jpg', '4', '1');
 INSERT INTO `t_image` VALUES ('12', '/goods/4/3.jpg', '4', '1');
+INSERT INTO `t_image` VALUES ('14', '/goods/5/1.jpg', '5', '1');
+INSERT INTO `t_image` VALUES ('15', '/goods/5/2.jpg', '5', '1');
+INSERT INTO `t_image` VALUES ('16', '/goods/5/3.jpg', '5', '1');
+INSERT INTO `t_image` VALUES ('17', '/goods/6/1.jpg', '6', '1');
+INSERT INTO `t_image` VALUES ('18', '/goods/6/2.jpg', '6', '1');
+INSERT INTO `t_image` VALUES ('19', '/goods/6/3.jpg', '6', '1');
 INSERT INTO `t_image` VALUES ('2', '/goods/1/2.jpg', '1', '1');
+INSERT INTO `t_image` VALUES ('20', '/goods/7/1.jpg', '7', '1');
+INSERT INTO `t_image` VALUES ('21', '/goods/7/2.jpg', '7', '1');
+INSERT INTO `t_image` VALUES ('22', '/goods/7/3.jpg', '7', '1');
+INSERT INTO `t_image` VALUES ('23', '/goods/8/1.jpg', '8', '1');
+INSERT INTO `t_image` VALUES ('24', '/goods/8/2.jpg', '8', '1');
+INSERT INTO `t_image` VALUES ('25', '/goods/8/3.jpg', '8', '1');
 INSERT INTO `t_image` VALUES ('3', '/goods/1/3.jpg', '1', '1');
-INSERT INTO `t_image` VALUES ('4', '/goods/1/1.jpg', '2', '1');
-INSERT INTO `t_image` VALUES ('5', '/goods/1/2.jpg', '2', '1');
-INSERT INTO `t_image` VALUES ('6', '/goods/1/3.jpg', '2', '1');
-INSERT INTO `t_image` VALUES ('7', '/goods/1/1.jpg', '3', '1');
-INSERT INTO `t_image` VALUES ('8', '/goods/1/2.jpg', '3', '1');
-INSERT INTO `t_image` VALUES ('9', '/goods/1/3.jpg', '3', '1');
+INSERT INTO `t_image` VALUES ('4', '/goods/2/1.jpg', '2', '1');
+INSERT INTO `t_image` VALUES ('5', '/goods/2/2.jpg', '2', '1');
+INSERT INTO `t_image` VALUES ('6', '/goods/2/3.jpg', '2', '1');
+INSERT INTO `t_image` VALUES ('7', '/goods/3/1.jpg', '3', '1');
+INSERT INTO `t_image` VALUES ('8', '/goods/3/2.jpg', '3', '1');
+INSERT INTO `t_image` VALUES ('9', '/goods/3/3.jpg', '3', '1');
 
 -- ----------------------------
 -- Table structure for `t_mall_user`
 -- ----------------------------
 DROP TABLE IF EXISTS `t_mall_user`;
 CREATE TABLE `t_mall_user` (
-  `userId` varchar(32) COLLATE utf8mb4_general_ci NOT NULL COMMENT '用户流水ID',
-  `nickName` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '用户真实姓名',
-  `loginAccount` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '登录账号',
-  `loginPassword` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '登录密码',
+  `userId` varchar(32) NOT NULL COMMENT '用户流水ID',
+  `nickName` varchar(50) DEFAULT NULL COMMENT '用户真实姓名',
+  `loginAccount` varchar(50) DEFAULT NULL COMMENT '登录账号',
+  `loginPassword` varchar(50) DEFAULT NULL COMMENT '登录密码',
   `crtDate` datetime DEFAULT NULL COMMENT '创建时间',
   `lastLoginDate` datetime DEFAULT NULL COMMENT '最后登录时间',
-  `token` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '登录的token',
-  `headImg` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '头像地址',
+  `token` varchar(50) DEFAULT NULL COMMENT '登录的token',
+  `headImg` varchar(100) DEFAULT NULL COMMENT '头像地址',
   `money` double DEFAULT NULL COMMENT '余额',
   PRIMARY KEY (`userId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='用于存储用户信息';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用于存储用户信息';
 
 -- ----------------------------
 -- Records of t_mall_user
@@ -254,18 +270,18 @@ CREATE TABLE `t_mall_user` (
 -- ----------------------------
 DROP TABLE IF EXISTS `t_order`;
 CREATE TABLE `t_order` (
-  `orderId` varchar(32) COLLATE utf8mb4_general_ci NOT NULL COMMENT '订单流水ID',
+  `orderId` varchar(32) NOT NULL COMMENT '订单流水ID',
   `createTime` datetime DEFAULT NULL COMMENT '创建时间',
   `payTime` datetime DEFAULT NULL COMMENT '付款时间',
   `transportTime` datetime DEFAULT NULL COMMENT '运输时间',
-  `state` varchar(2) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '订单状态【1：待付款；2：待收货；3：待评价；4：售后；9：订单已关闭】',
-  `orderDetailId` varchar(32) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '订单明细ID',
+  `state` varchar(2) DEFAULT NULL COMMENT '订单状态【1：待付款；2：待收货；3：待评价；4：售后；9：订单已关闭】',
+  `orderDetailId` varchar(32) DEFAULT NULL COMMENT '订单明细ID',
   `totalPrice` double DEFAULT NULL COMMENT '商品总价',
-  `crtUserId` varchar(32) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '订单创建人ID',
+  `crtUserId` varchar(32) DEFAULT NULL COMMENT '订单创建人ID',
   `goodNum` int(11) DEFAULT NULL COMMENT '商品件数',
-  `payType` varchar(2) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '支付类型【1：微信；2：支付宝】',
+  `payType` varchar(2) DEFAULT NULL COMMENT '支付类型【1：微信；2：支付宝】',
   PRIMARY KEY (`orderId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='用户订单信息表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户订单信息表';
 
 -- ----------------------------
 -- Records of t_order
@@ -276,16 +292,16 @@ CREATE TABLE `t_order` (
 -- ----------------------------
 DROP TABLE IF EXISTS `t_order_detail`;
 CREATE TABLE `t_order_detail` (
-  `orderDetailId` varchar(32) COLLATE utf8mb4_general_ci NOT NULL COMMENT '订单明细流水ID',
-  `title` varchar(200) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '商品名称',
+  `orderDetailId` varchar(32) NOT NULL COMMENT '订单明细流水ID',
+  `title` varchar(200) DEFAULT NULL COMMENT '商品名称',
   `price` double DEFAULT NULL COMMENT '商品单价',
-  `image` varchar(200) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '商品图片',
+  `image` varchar(200) DEFAULT NULL COMMENT '商品图片',
   `number` int(11) DEFAULT NULL COMMENT '购买数量',
   `detailPrice` double DEFAULT NULL COMMENT '订单明细总价',
-  `attr` varchar(200) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '商品规格',
-  `goodId` varchar(32) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '商品流水ID',
+  `attr` varchar(200) DEFAULT NULL COMMENT '商品规格',
+  `goodId` varchar(32) DEFAULT NULL COMMENT '商品流水ID',
   PRIMARY KEY (`orderDetailId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='订单明细';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单明细';
 
 -- ----------------------------
 -- Records of t_order_detail
@@ -296,33 +312,34 @@ CREATE TABLE `t_order_detail` (
 -- ----------------------------
 DROP TABLE IF EXISTS `t_product`;
 CREATE TABLE `t_product` (
-  `productId` varchar(32) COLLATE utf8mb4_general_ci NOT NULL COMMENT '产品流水ID',
-  `title` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '产品名称',
-  `type` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '浜у搧绫诲瀷',
-  `state` varchar(2) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '产品状态',
-  `specsJson` varchar(500) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '产品规格的JSON信息例如：[{"尺寸":["xl","xxl"]},{"颜色":["白色","蓝色"]}]',
+  `productId` varchar(32) NOT NULL COMMENT '产品流水ID',
+  `title` varchar(100) DEFAULT NULL COMMENT '产品名称',
+  `type` varchar(20) DEFAULT NULL COMMENT '浜у搧绫诲瀷',
+  `state` varchar(2) DEFAULT NULL COMMENT '产品状态',
+  `specsJson` varchar(500) DEFAULT NULL COMMENT '产品规格的JSON信息例如：[{"尺寸":["xl","xxl"]},{"颜色":["白色","蓝色"]}]',
   `crtDate` datetime DEFAULT NULL,
   `totalSales` int(11) DEFAULT NULL,
   `pageViews` int(11) DEFAULT NULL,
   PRIMARY KEY (`productId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='主要用于存储产品信息';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='主要用于存储产品信息';
 
 -- ----------------------------
 -- Records of t_product
 -- ----------------------------
 INSERT INTO `t_product` VALUES ('1', '下装连衣裙', '3.26.32', '1', '[{\"尺寸\":[\"xl\",\"xxl\"]},{\"颜色\":[\"白色\",\"蓝色\"]}]', '2019-07-29 14:03:58', '500', '656');
+INSERT INTO `t_product` VALUES ('2', '上装连衣裙', '3.26.31', '1', '[{\"尺寸\":[\"xl\",\"xxl\"]},{\"颜色\":[\"黑色\",\"绿色\"]}]', '2019-07-29 19:58:18', '800', '700');
 
 -- ----------------------------
 -- Table structure for `t_recharge`
 -- ----------------------------
 DROP TABLE IF EXISTS `t_recharge`;
 CREATE TABLE `t_recharge` (
-  `rechargeId` varchar(32) COLLATE utf8mb4_general_ci NOT NULL COMMENT '充值流水ID',
+  `rechargeId` varchar(32) NOT NULL COMMENT '充值流水ID',
   `money` double DEFAULT NULL COMMENT '充值金额',
   `rechargeDate` datetime DEFAULT NULL COMMENT '充值时间',
-  `state` varchar(2) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '充值状态【0：充值失败；1：待付款；2：充值成功；9：取消充值】',
+  `state` varchar(2) DEFAULT NULL COMMENT '充值状态【0：充值失败；1：待付款；2：充值成功；9：取消充值】',
   PRIMARY KEY (`rechargeId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='用户充值明细表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户充值明细表';
 
 -- ----------------------------
 -- Records of t_recharge

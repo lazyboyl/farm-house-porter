@@ -24,6 +24,16 @@ public class GoodController {
     private GoodService goodService;
 
     /**
+     * 功能描述：根据商品ID来获取商品数据
+     * @param goodId 商品ID
+     * @return 返回商品信息
+     */
+    @PostMapping("getGoodInfo")
+    public ReturnInfo getGoodInfo(@RequestParam("goodId")String goodId){
+        return goodService.getGoodInfo(goodId);
+    }
+
+    /**
      * 功能描述： 查询商品的列表数据
      *
      * @param current  第几页

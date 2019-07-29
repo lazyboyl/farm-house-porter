@@ -6,6 +6,12 @@ import tk.mybatis.mapper.annotation.KeySql;
 import java.util.Date;
 import javax.persistence.*;
 
+/**
+ * 类描述：商品类
+ *
+ * @author linzf
+ * @since 2019-07-29
+ */
 @Table(name = "t_good")
 public class Good {
     /**
