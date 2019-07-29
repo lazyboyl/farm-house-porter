@@ -9,7 +9,7 @@
 			<view v-for="item in slist" :key="item.id" class="s-list" :id="'main-'+item.id">
 				<text class="s-item">{{item.name}}</text>
 				<view class="t-list">
-					<view @click="navToList(item.id, titem.id)" v-if="titem.pid === item.id" class="t-item" v-for="titem in tlist" :key="titem.id">
+					<view @click="navToList(item.id, titem.id)" v-if="titem.pId === item.id" class="t-item" v-for="titem in tlist" :key="titem.id">
 						<image :src="titem.picture"></image>
 						<text>{{titem.name}}</text>
 					</view>
@@ -20,6 +20,8 @@
 </template>
 
 <script>
+	import {loadCategory} from '../../api/category/api.category.js'
+	
 	export default {
 		data() {
 			return {
@@ -36,16 +38,23 @@
 		},
 		methods: {
 			async loadData(){
-				let list = await this.$api.json('cateList');
-				list.forEach(item=>{
-					if(!item.pid){
-						this.flist.push(item);  //pid为父级id, 没有pid或者pid=0是一级分类
-					}else if(!item.picture){
-						this.slist.push(item); //没有图的是2级分类
-					}else{
-						this.tlist.push(item); //3级分类
+				let _this = this;
+				loadCategory({}).then(res=>{
+					if(res.code==200){
+					    let list = res.obj;
+						list.forEach(item=>{
+							if(item.pId == 0){
+								_this.flist.push(item);  //pid为父级id, 没有pid或者pid=0是一级分类
+							}else if(item.picture == '' || item.picture == null){
+								_this.slist.push(item); //没有图的是2级分类
+							}else{
+								_this.tlist.push(item); //3级分类
+							}
+						}) 
 					}
-				}) 
+				}).catch(err => {
+						 this.$api.msg(err);
+				})
 			},
 			//一级分类点击
 			tabtap(item){
@@ -54,7 +63,7 @@
 				}
 				
 				this.currentId = item.id;
-				let index = this.slist.findIndex(sitem=>sitem.pid === item.id);
+				let index = this.slist.findIndex(sitem=>sitem.pId === item.id);
 				this.tabScrollTop = this.slist[index].top;
 			},
 			//右侧栏滚动
@@ -65,7 +74,7 @@
 				let scrollTop = e.detail.scrollTop;
 				let tabs = this.slist.filter(item=>item.top <= scrollTop).reverse();
 				if(tabs.length > 0){
-					this.currentId = tabs[0].pid;
+					this.currentId = tabs[0].pId;
 				}
 			},
 			//计算右侧栏每个tab的高度等信息
