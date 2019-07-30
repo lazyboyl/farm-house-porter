@@ -12,7 +12,7 @@ File Encoding         : 65001
 
 Date: 2019-07-30 17:24:33
 */
-
+use farm_house_porter;
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
@@ -25,13 +25,13 @@ CREATE TABLE `t_address` (
   `area` varchar(200) DEFAULT NULL COMMENT '街道地址',
   `name` varchar(100) DEFAULT NULL COMMENT '联系人',
   `mobile` varchar(20) DEFAULT NULL COMMENT '手机号码',
-  `defaultAddress` varchar(2) DEFAULT NULL COMMENT '鏄惁涓洪粯璁ゆ敹璐у湴鍧€銆?锛氶粯璁わ紱0锛氫笉榛樿銆?',
+  `defaultAddress` varchar(2) DEFAULT NULL COMMENT '是否默认地址',
   `crtDate` datetime DEFAULT NULL COMMENT '创建时间',
   `crtUserId` varchar(32) DEFAULT NULL COMMENT '创建人ID',
   `updateDate` datetime DEFAULT NULL COMMENT '更新时间',
   `updateUserId` varchar(32) DEFAULT NULL COMMENT '更新人ID',
   PRIMARY KEY (`addressId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户的地址维护表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4  COMMENT='用户的地址维护表';
 
 -- ----------------------------
 -- Records of t_address
@@ -53,7 +53,7 @@ CREATE TABLE `t_cart` (
   `image` varchar(200) DEFAULT NULL COMMENT '商品图片地址',
   `crtUserId` varchar(32) DEFAULT NULL COMMENT '所属用户ID',
   PRIMARY KEY (`cartId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户的购物车信息表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4  COMMENT='用户的购物车信息表';
 
 -- ----------------------------
 -- Records of t_cart
@@ -70,7 +70,7 @@ CREATE TABLE `t_category` (
   `name` varchar(50) DEFAULT NULL COMMENT '名称',
   `fullPath` varchar(200) DEFAULT NULL COMMENT '分类完全路径',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ;
 
 -- ----------------------------
 -- Records of t_category
@@ -134,7 +134,7 @@ CREATE TABLE `t_consume_detail` (
   `amountBefore` double DEFAULT NULL COMMENT '消费前账户金额',
   `amountAfter` double DEFAULT NULL COMMENT '消费后账户金额',
   PRIMARY KEY (`consumeDetaiId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='记录用户消费的明细信息';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4  COMMENT='记录用户消费的明细信息';
 
 -- ----------------------------
 -- Records of t_consume_detail
@@ -149,7 +149,7 @@ CREATE TABLE `t_desc_info` (
   `productId` varchar(32) DEFAULT NULL COMMENT '产品流水ID',
   `image` varchar(100) DEFAULT NULL COMMENT '图片地址',
   PRIMARY KEY (`descImageId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='产品图文详情';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4  COMMENT='产品图文详情';
 
 -- ----------------------------
 -- Records of t_desc_info
@@ -178,7 +178,7 @@ CREATE TABLE `t_good` (
   `state` varchar(2) DEFAULT NULL COMMENT '商品状态',
   `publicTime` datetime DEFAULT NULL COMMENT '发布时间',
   PRIMARY KEY (`goodId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用于存放商品信息';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4  COMMENT='用于存放商品信息';
 
 -- ----------------------------
 -- Records of t_good
@@ -202,7 +202,7 @@ CREATE TABLE `t_good_compare_specs` (
   `productId` varchar(32) DEFAULT NULL COMMENT '产品ID',
   `specs` varchar(100) DEFAULT NULL COMMENT '规格信息',
   PRIMARY KEY (`goodCompareSpecsId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='商品与规格的对照关系表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4  COMMENT='商品与规格的对照关系表';
 
 -- ----------------------------
 -- Records of t_good_compare_specs
@@ -219,7 +219,7 @@ CREATE TABLE `t_image` (
   `goodId` varchar(32) DEFAULT NULL COMMENT '商品ID',
   `type` varchar(2) DEFAULT NULL,
   PRIMARY KEY (`imageId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='维护所有商品的图片信息';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4  COMMENT='维护所有商品的图片信息';
 
 -- ----------------------------
 -- Records of t_image
@@ -264,7 +264,7 @@ CREATE TABLE `t_mall_user` (
   `headImg` varchar(100) DEFAULT NULL COMMENT '头像地址',
   `money` double DEFAULT NULL COMMENT '余额',
   PRIMARY KEY (`userId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用于存储用户信息';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4  COMMENT='用于存储用户信息';
 
 -- ----------------------------
 -- Records of t_mall_user
@@ -286,7 +286,7 @@ CREATE TABLE `t_order` (
   `goodNum` int(11) DEFAULT NULL COMMENT '商品件数',
   `payType` varchar(2) DEFAULT NULL COMMENT '支付类型【1：微信；2：支付宝】',
   PRIMARY KEY (`orderId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户订单信息表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4  COMMENT='用户订单信息表';
 
 -- ----------------------------
 -- Records of t_order
@@ -306,7 +306,7 @@ CREATE TABLE `t_order_detail` (
   `attr` varchar(200) DEFAULT NULL COMMENT '商品规格',
   `goodId` varchar(32) DEFAULT NULL COMMENT '商品流水ID',
   PRIMARY KEY (`orderDetailId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='订单明细';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4  COMMENT='订单明细';
 
 -- ----------------------------
 -- Records of t_order_detail
@@ -327,7 +327,7 @@ CREATE TABLE `t_product` (
   `pageViews` int(11) DEFAULT NULL,
   `goodId` varchar(32) DEFAULT NULL,
   PRIMARY KEY (`productId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='主要用于存储产品信息';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4  COMMENT='主要用于存储产品信息';
 
 -- ----------------------------
 -- Records of t_product
@@ -344,7 +344,7 @@ CREATE TABLE `t_product_specs` (
   `productId` varchar(32) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '产品ID',
   `specs` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '规格信息',
   PRIMARY KEY (`productSpecsId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='产品规格表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4  COMMENT='产品规格表';
 
 -- ----------------------------
 -- Records of t_product_specs
@@ -364,7 +364,7 @@ CREATE TABLE `t_product_specs_detail` (
   `productSpecsId` varchar(32) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '产品规格表流水ID',
   `productSpecsDetailName` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '产品规格明细名称',
   PRIMARY KEY (`productSpecsDetailId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='产品规格明细表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4  COMMENT='产品规格明细表';
 
 -- ----------------------------
 -- Records of t_product_specs_detail
@@ -388,7 +388,7 @@ CREATE TABLE `t_recharge` (
   `rechargeDate` datetime DEFAULT NULL COMMENT '充值时间',
   `state` varchar(2) DEFAULT NULL COMMENT '充值状态【0：充值失败；1：待付款；2：充值成功；9：取消充值】',
   PRIMARY KEY (`rechargeId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户充值明细表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4  COMMENT='用户充值明细表';
 
 -- ----------------------------
 -- Records of t_recharge

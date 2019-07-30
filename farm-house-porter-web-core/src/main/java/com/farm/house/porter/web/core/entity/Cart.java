@@ -5,8 +5,28 @@ import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.*;
 
+/**
+ * @author linzf
+ * @since 2019-07-30
+ * 类描述：购物车的实体类
+ */
 @Table(name = "t_cart")
 public class Cart {
+
+    public Cart(){
+        super();
+    }
+
+    public  Cart(Good good,MallUser mallUser){
+        this.title = good.getTitle();
+        this.price = good.getDiscountPrice();
+        this.number = 1;
+        this.goodId = good.getGoodId();
+        this.image = good.getDefaultImage();
+        this.crtUserId = mallUser.getUserId();
+        this.attrVal = good.getGoodNorms();
+    }
+
     /**
      * 购物车流水ID
      */

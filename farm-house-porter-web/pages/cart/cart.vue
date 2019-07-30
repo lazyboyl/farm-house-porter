@@ -15,13 +15,13 @@
 		<view v-else>
 			<!-- 列表 -->
 			<view class="cart-list">
-				<block v-for="(item, index) in cartList" :key="item.id">
+				<block v-for="(item, index) in cartList" :key="item.cartId">
 					<view
 						class="cart-item" 
 						:class="{'b-b': index!==cartList.length-1}"
 					>
 						<view class="image-wrapper">
-							<image :src="item.image" 
+							<image :src="'http://127.0.0.1/fhp' + item.image" 
 								:class="[item.loaded]"
 								mode="aspectFill" 
 								lazy-load 
@@ -36,14 +36,14 @@
 						</view>
 						<view class="item-right">
 							<text class="clamp title">{{item.title}}</text>
-							<text class="attr">{{item.attr_val}}</text>
-							<text class="price">¥{{item.price}}</text>
+							<text class="attr">{{item.attrVal}}</text>
+							<text class="price">¥{{item.discountPrice}}</text>
 							<uni-number-box 
 								class="step"
 								:min="1" 
-								:max="item.stock"
-								:value="item.number>item.stock?item.stock:item.number"
-								:isMax="item.number>=item.stock?true:false"
+								:max="item.store"
+								:value="item.number>item.store?item.store:item.number"
+								:isMax="item.number>=item.store?true:false"
 								:isMin="item.number===1"
 								:index="index"
 								@eventChange="numberChange"
@@ -69,7 +69,7 @@
 					<text class="price">¥{{total}}</text>
 					<text class="coupon">
 						已优惠
-						<text>74.35</text>
+						<text>{{discount}}</text>
 						元
 					</text>
 				</view>
@@ -84,6 +84,8 @@
 		mapState
 	} from 'vuex';
 	import uniNumberBox from '@/components/uni-number-box.vue'
+	import {getMyCartList,clearCart} from '../../api/cart/cart.api.js';
+	
 	export default {
 		components: {
 			uniNumberBox
@@ -91,12 +93,15 @@
 		data() {
 			return {
 				total: 0, //总价格
+				discount: 0,// 优惠
 				allChecked: false, //全选状态  true|false
 				empty: false, //空白页现实  true|false
 				cartList: [],
 			};
 		},
-		onLoad(){
+		onShow() {// 每次页面被展示出来的时候就重新去获取数据
+			// 先要将数据置空，否则将会无法加载数据
+			this.cartList = [];
 			this.loadData();
 		},
 		watch:{
@@ -114,12 +119,24 @@
 		methods: {
 			//请求数据
 			async loadData(){
+				let _this = this;
+				getMyCartList({}).then(res=>{
+					if(res.code==200){
+						_this.cartList = res.obj;
+					}else{
+					    _this.$api.msg(res.msg);
+					}
+				}).catch(err => {
+					this.$api.msg(err);
+				})
+				/**
 				let list = await this.$api.json('cartList'); 
 				let cartList = list.map(item=>{
 					item.checked = true;
 					return item;
 				});
 				this.cartList = cartList;
+				*/
 				this.calcTotal();  //计算总价
 			},
 			//监听image加载完成
@@ -154,23 +171,40 @@
 				this.cartList[data.index].number = data.number;
 				this.calcTotal();
 			},
-			//删除
+			//删除单个购物数据
 			deleteCartItem(index){
-				let list = this.cartList;
-				let row = list[index];
-				let id = row.id;
-
-				this.cartList.splice(index, 1);
-				this.calcTotal();
+				let cartId = this.cartList[index].cartId;
+                let _this = this;
+				clearCart({cartIds:cartId}).then(res=>{
+					if(res.code == 200){
+						_this.cartList.splice(index, 1);
+						_this.calcTotal();
+					}
+					_this.$api.msg(res.msg);
+				})
 				uni.hideLoading();
 			},
-			//清空
+			//清空购物车
 			clearCart(){
+				let _this = this;
 				uni.showModal({
 					content: '清空购物车？',
 					success: (e)=>{
 						if(e.confirm){
-							this.cartList = [];
+							let cartIds = "";
+							for(let i=0;i<this.cartList.length;i++){
+								if(i==0){
+									cartIds = this.cartList[i].cartId;
+								}else{
+									cartIds = cartIds + ',' +this.cartList[i].cartId;
+								}
+							}
+							clearCart({cartIds:cartIds}).then(res=>{
+								if(res.code == 200){
+									_this.cartList = [];
+								}
+								_this.$api.msg(res.msg);
+							})
 						}
 					}
 				})
@@ -183,16 +217,19 @@
 					return;
 				}
 				let total = 0;
+				let discount = 0;
 				let checked = true;
 				list.forEach(item=>{
 					if(item.checked === true){
-						total += item.price * item.number;
+						total += item.discountPrice * item.number;
+						discount += item.price * item.number;
 					}else if(checked === true){
 						checked = false;
 					}
 				})
 				this.allChecked = checked;
 				this.total = Number(total.toFixed(2));
+				this.discount = Number((discount-total).toFixed(2))
 			},
 			//创建订单
 			createOrder(){

@@ -2,9 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.farm.house.porter.web.core.dao.CartDao">
   <resultMap id="BaseResultMap" type="com.farm.house.porter.web.core.entity.Cart">
-    <!--
-      WARNING - @mbg.generated
-    -->
     <id column="cartId" jdbcType="VARCHAR" property="cartId" />
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="attrVal" jdbcType="VARCHAR" property="attrVal" />
@@ -14,4 +11,32 @@
     <result column="image" jdbcType="VARCHAR" property="image" />
     <result column="crtUserId" jdbcType="VARCHAR" property="crtUserId" />
   </resultMap>
+
+  <resultMap id="MyCartMap" type="com.farm.house.porter.web.core.vo.CartVo">
+    <id column="cartId" jdbcType="VARCHAR" property="cartId" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="attrVal" jdbcType="VARCHAR" property="attrVal" />
+    <result column="discountPrice" jdbcType="DOUBLE" property="discountPrice" />
+    <result column="price" jdbcType="DOUBLE" property="price" />
+    <result column="number" jdbcType="INTEGER" property="number" />
+    <result column="goodId" jdbcType="VARCHAR" property="goodId" />
+    <result column="image" jdbcType="VARCHAR" property="image" />
+    <result column="store" jdbcType="INTEGER" property="store" />
+  </resultMap>
+
+  <!-- 根据购物车ID和用户ID来删除购物车数据 -->
+  <delete id="clearCart" >
+    delete from t_cart where cartId = #{cartId} and crtUserId = #{userId}
+  </delete>
+
+
+  <!-- 获取我的购物车列表 -->
+  <select id="getMyCartList" resultMap="MyCartMap">
+    select tc.number,tc.cartId,tg.title,tg.discountPrice,tg.price,tg.store,tg.defaultImage as image,tg.goodNorms as attrVal from t_cart tc inner join t_good tg on tc.goodId = tg.goodId where  tc.crtUserId = #{userId}
+  </select>
+
+  <!-- 根据商品ID和用户ID来获取购物信息 -->
+  <select id="getCartByGoodIdAndUserId" resultMap="BaseResultMap">
+    select * from t_cart where goodId = #{goodId} and crtUserId = #{userId}
+  </select>
 </mapper>

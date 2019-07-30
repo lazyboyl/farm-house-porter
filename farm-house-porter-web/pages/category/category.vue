@@ -61,7 +61,6 @@
 				if(!this.sizeCalcState){
 					this.calcSize();
 				}
-				
 				this.currentId = item.id;
 				let index = this.slist.findIndex(sitem=>sitem.pId === item.id);
 				this.tabScrollTop = this.slist[index].top;

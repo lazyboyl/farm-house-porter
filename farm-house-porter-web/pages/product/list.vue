@@ -80,7 +80,6 @@
 				orderBy: '' // 排序方式
 			};
 		},
-		
 		onLoad(options){
 			this.type = options.fullPath;
 			// #ifdef H5

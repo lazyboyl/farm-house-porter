@@ -122,7 +122,7 @@
 			
 			<view class="action-btn-group">
 				<button type="primary" class=" action-btn no-border buy-now-btn" @click="buy">立即购买</button>
-				<button type="primary" class=" action-btn no-border add-cart-btn">加入购物车</button>
+				<button type="primary" class=" action-btn no-border add-cart-btn" @click="addCart">加入购物车</button>
 			</view>
 		</view>
 		
@@ -179,6 +179,7 @@
 <script>
 	import share from '@/components/share';
 	import {getGoodInfo} from '../../api/good/api.good.js';
+	import {addToCart} from '../../api/cart/cart.api.js';
 	
 	export default{
 		components: {
@@ -213,11 +214,22 @@
 			this.shareList = await this.$api.json('shareList');
 		},
 		methods:{
+			addCart(){
+				let goodId = this.selectGood.goodId;
+				if(goodId==''){
+					this.$api.msg('请选择购买类型以后再来加入购物车！');
+					return;
+				}
+				addToCart({goodId:goodId}).then(res=>{
+					this.$api.msg(res.msg);
+				}).catch(err => {
+					this.$api.msg(err);
+				})
+			},
 			loadGoodInfo(goodId){
 				let _this = this;
 				getGoodInfo({goodId:goodId}).then(res=>{
 					if(res.code==200){
-						console.log(JSON.stringify(res.obj))
 						// 获取轮换图的数据
 						_this.imgList = res.obj.carouselImagesList;
 						_this.specList = res.obj.specList;
@@ -230,11 +242,9 @@
 						})
 						descInfo = descInfo + '</div>';
 						_this.desc = descInfo;
-						console.log('----' + _this.desc)
 						//规格 默认选中第一条
 						_this.specList.forEach(item=>{
 							for(let cItem of _this.specChildList){
-								console.log(cItem.productSpecsId + '---' + item.productSpecsId)
 								if(cItem.productSpecsId === item.productSpecsId){
 									_this.$set(cItem, 'selected', true);
 									_this.specSelected.push(cItem);
@@ -311,7 +321,6 @@
 					if(g.goodNorms==spec){
 						this.selectGood = g;
 						this.imgList = g.imageList;
-						console.log('-----'+JSON.stringify(this.imgList))
 					}
 				});
 			}
