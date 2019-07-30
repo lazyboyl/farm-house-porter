@@ -11,7 +11,7 @@
     <result column="sales" jdbcType="INTEGER" property="sales" />
     <result column="defaultImage" jdbcType="VARCHAR" property="defaultImage" />
     <result column="goodNorms" jdbcType="VARCHAR" property="goodNorms" />
-    <result column="produceId" jdbcType="VARCHAR" property="produceId" />
+    <result column="productId" jdbcType="VARCHAR" property="productId" />
     <result column="state" jdbcType="VARCHAR" property="state" />
     <result column="publicTime" jdbcType="TIMESTAMP" property="publicTime" />
   </resultMap>
@@ -24,10 +24,36 @@
     <result column="image" jdbcType="VARCHAR" property="image" />
   </resultMap>
 
+  <resultMap id="GoodInfo" type="com.farm.house.porter.web.core.entity.Good">
+    <id column="goodId" jdbcType="VARCHAR" property="goodId" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="discountPrice" jdbcType="DOUBLE" property="discountPrice" />
+    <result column="price" jdbcType="DOUBLE" property="price" />
+    <result column="couponTip" jdbcType="DOUBLE" property="couponTip" />
+    <result column="store" jdbcType="INTEGER" property="store" />
+    <result column="sales" jdbcType="INTEGER" property="sales" />
+    <result column="defaultImage" jdbcType="VARCHAR" property="defaultImage" />
+    <result column="goodNorms" jdbcType="VARCHAR" property="goodNorms" />
+    <result column="productId" jdbcType="VARCHAR" property="productId" />
+    <result column="state" jdbcType="VARCHAR" property="state" />
+    <result column="publicTime" jdbcType="TIMESTAMP" property="publicTime" />
+    <collection property="imageList" ofType="com.farm.house.porter.web.core.entity.Image" javaType="java.util.ArrayList">
+      <id column="imageId" jdbcType="VARCHAR" property="imageId" />
+      <result column="image" jdbcType="VARCHAR" property="image" />
+      <result column="goodId" jdbcType="VARCHAR" property="goodId" />
+      <result column="type" jdbcType="VARCHAR" property="type" />
+    </collection>
+  </resultMap>
+
+  <!-- 根据产品ID来查询该产品底下的所有的商品 -->
+  <select id="queryGoodByProductId" resultMap="GoodInfo">
+    select TG.*,ti.* from t_good tg inner join t_image ti on tg.goodId = ti.goodId where ti.type = 1 and  productId = #{productId}
+  </select>
+
   <!-- 查询商品的列表数据 -->
   <select id="queryGoodList" resultMap="GoodListMap">
     select tg.title,tg.discountPrice,tg.defaultImage as image,tg.goodId,tg.sales as totalSales,tg.discountPrice as price from t_product tp inner join t_good tg
-    on tp.productId = tg.produceId where 1=1
+    on tp.goodId = tg.goodId where 1=1
     <if test="type!=null and type!=''">
         and tp.type like concat(#{type},'%')
     </if>

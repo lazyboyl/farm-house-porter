@@ -41,7 +41,8 @@
 						<view class="cate-item b-b two">{{item.name}}</view>
 						<view 
 							v-for="tItem in item.child" :key="tItem.id" 
-							class="cate-item b-b" 
+							class="cate-item b-b two-margin" 
+							
 							:class="{active: tItem.id==cateId}"
 							@click="changeCate(tItem)">
 							{{tItem.name}}
@@ -124,15 +125,17 @@
 				})
 			},
 			//加载商品 ，带下拉刷新和上滑加载
-			async loadData(type='add', loading) {
+			async loadData(actionType='add', loading) {
 				//没有更多直接返回
-				if(type === 'add'){
+				if(actionType === 'add'){
 					if(this.loadingType === 'nomore'){
 						return;
 					}
 					this.loadingType = 'loading';
 				}else{
 					this.loadingType = 'more'
+					// 若当前为重新刷新页面则页数重置
+					this.current = 1;	
 				}
 				//筛选，综合排序直接使用发布时间和商品的销量作为排序
 				if(this.filterIndex === 0){
@@ -150,7 +153,6 @@
 					}else if(this.priceOrder == '2'){
 						this.orderBy = 'tg.discountPrice desc';
 					}
-					
 				}
 				let _this = this;
 				queryGoodList({
@@ -160,14 +162,18 @@
 					"orderBy": this.orderBy // 排序方式
 				}).then(res=>{
 					if(res.code==200){
-						_this.goodsList = res.obj.rows;
+						if(actionType === 'add'){
+							_this.goodsList = _this.goodsList.concat(res.obj.rows)
+						}else{
+							_this.goodsList = res.obj.rows;
+						}
 						// 表示当前数据库已经没有数据了
 						if(_this.current * _this.pageSize >= res.obj.total){
 							_this.loadingType = 'nomore';
 						}else{
 							_this.loadingType = 'more';
 						}
-						if(type === 'refresh'){
+						if(actionType === 'refresh'){
 							if(loading == 1){
 								uni.hideLoading()
 							}else{
@@ -181,8 +187,6 @@
 				}).catch(err => {
 					this.$api.msg(err);
 				})
-				
-				
 			},
 			//筛选点击
 			tabClick(index){
@@ -221,6 +225,7 @@
 					duration: 300,
 					scrollTop: 0
 				})
+				this.type = item.fullPath;
 				this.loadData('refresh', 1);
 				uni.showLoading({
 					title: '正在加载'
@@ -228,10 +233,9 @@
 			},
 			//详情
 			navToDetailPage(item){
-				//测试数据没有写id，用title代替
-				let id = item.title;
+				let goodId = item.goodId;
 				uni.navigateTo({
-					url: `/pages/product/product?id=${id}`
+					url: `/pages/product/product?goodId=${goodId}`
 				})
 			},
 			stopPrevent(){}
@@ -368,8 +372,12 @@
 		.two{
 			height: 64upx;
 			color: #303133;
-			font-size: 30upx;
+			font-size: 40upx;
 			background: #f8f8f8;
+			font-weight: bold;
+		}
+		.two-margin{
+			margin-left: 10px;
 		}
 		.active{
 			color: $base-color;

@@ -5,7 +5,7 @@
 				<swiper-item class="swiper-item" v-for="(item,index) in imgList" :key="index">
 					<view class="image-wrapper">
 						<image
-							:src="item.src" 
+							:src="'http://127.0.0.1/fhp' + item.image" 
 							class="loaded" 
 							mode="aspectFill"
 						></image>
@@ -15,17 +15,17 @@
 		</view>
 		
 		<view class="introduce-section">
-			<text class="title">恒源祥2019春季长袖白色t恤 新款春装</text>
+			<text class="title">{{selectGood.title}}</text>
 			<view class="price-box">
 				<text class="price-tip">¥</text>
-				<text class="price">341.6</text>
-				<text class="m-price">¥488</text>
-				<text class="coupon-tip">7折</text>
+				<text class="price">{{selectGood.discountPrice}}</text>
+				<text class="m-price" v-if="selectGood.couponTip<100">¥{{selectGood.price}}</text>
+				<text class="coupon-tip" v-if="selectGood.couponTip<100">{{selectGood.couponTip/10}}折</text>
 			</view>
 			<view class="bot-row">
-				<text>销量: 108</text>
-				<text>库存: 4690</text>
-				<text>浏览量: 768</text>
+				<text>销量: {{selectGood.sales}}</text>
+				<text>库存: {{selectGood.store}}</text>
+				<text>浏览量: {{pageViews}}</text>
 			</view>
 		</view>
 		
@@ -49,7 +49,7 @@
 				<text class="tit">购买类型</text>
 				<view class="con">
 					<text class="selected-text" v-for="(sItem, sIndex) in specSelected" :key="sIndex">
-						{{sItem.name}}
+						{{sItem.productSpecsDetailName}}
 					</text>
 				</view>
 				<text class="yticon icon-you"></text>
@@ -138,29 +138,29 @@
 			<view class="mask"></view>
 			<view class="layer attr-content" @click.stop="stopPrevent">
 				<view class="a-t">
-					<image src="https://gd3.alicdn.com/imgextra/i3/0/O1CN01IiyFQI1UGShoFKt1O_!!0-item_pic.jpg_400x400.jpg"></image>
+					<image :src="'http://127.0.0.1/fhp' + selectGood.defaultImage "></image>
 					<view class="right">
-						<text class="price">¥328.00</text>
-						<text class="stock">库存：188件</text>
+						<text class="price">¥{{selectGood.discountPrice}}</text>
+						<text class="stock">库存：{{selectGood.store}}件</text>
 						<view class="selected">
 							已选：
 							<text class="selected-text" v-for="(sItem, sIndex) in specSelected" :key="sIndex">
-								{{sItem.name}}
+								{{sItem.productSpecsDetailName}}
 							</text>
 						</view>
 					</view>
 				</view>
 				<view v-for="(item,index) in specList" :key="index" class="attr-list">
-					<text>{{item.name}}</text>
+					<text>{{item.specs}}</text>
 					<view class="item-list">
 						<text 
 							v-for="(childItem, childIndex) in specChildList" 
-							v-if="childItem.pid === item.id"
+							v-if="childItem.productSpecsId === item.productSpecsId"
 							:key="childIndex" class="tit"
 							:class="{selected: childItem.selected}"
-							@click="selectSpec(childIndex, childItem.pid)"
+							@click="selectSpec(childIndex, childItem.productSpecsId)"
 						>
-							{{childItem.name}}
+							{{childItem.productSpecsDetailName}}
 						</text>
 					</view>
 				</view>
@@ -178,6 +178,8 @@
 
 <script>
 	import share from '@/components/share';
+	import {getGoodInfo} from '../../api/good/api.good.js';
+	
 	export default{
 		components: {
 			share
@@ -186,110 +188,65 @@
 			return {
 				specClass: 'none',
 				specSelected:[],
-				
 				favorite: true,
 				shareList: [],
-				imgList: [
-					{
-						src: 'https://gd3.alicdn.com/imgextra/i3/0/O1CN01IiyFQI1UGShoFKt1O_!!0-item_pic.jpg_400x400.jpg'
-					},
-					{
-						src: 'https://gd3.alicdn.com/imgextra/i3/TB1RPFPPFXXXXcNXpXXXXXXXXXX_!!0-item_pic.jpg_400x400.jpg'
-					},
-					{
-						src: 'https://gd2.alicdn.com/imgextra/i2/38832490/O1CN01IYq7gu1UGShvbEFnd_!!38832490.jpg_400x400.jpg'
-					}
-				],
-				desc: `
-					<div style="width:100%">
-						<img style="width:100%;display:block;" src="https://gd3.alicdn.com/imgextra/i4/479184430/O1CN01nCpuLc1iaz4bcSN17_!!479184430.jpg_400x400.jpg" />
-						<img style="width:100%;display:block;" src="https://gd2.alicdn.com/imgextra/i2/479184430/O1CN01gwbN931iaz4TzqzmG_!!479184430.jpg_400x400.jpg" />
-						<img style="width:100%;display:block;" src="https://gd3.alicdn.com/imgextra/i3/479184430/O1CN018wVjQh1iaz4aupv1A_!!479184430.jpg_400x400.jpg" />
-						<img style="width:100%;display:block;" src="https://gd4.alicdn.com/imgextra/i4/479184430/O1CN01tWg4Us1iaz4auqelt_!!479184430.jpg_400x400.jpg" />
-						<img style="width:100%;display:block;" src="https://gd1.alicdn.com/imgextra/i1/479184430/O1CN01Tnm1rU1iaz4aVKcwP_!!479184430.jpg_400x400.jpg" />
-					</div>
-				`,
-				specList: [
-					{
-						id: 1,
-						name: '尺寸',
-					},
-					{	
-						id: 2,
-						name: '颜色',
-					},
-				],
-				specChildList: [
-					{
-						id: 1,
-						pid: 1,
-						name: 'XS',
-					},
-					{
-						id: 2,
-						pid: 1,
-						name: 'S',
-					},
-					{
-						id: 3,
-						pid: 1,
-						name: 'M',
-					},
-					{
-						id: 4,
-						pid: 1,
-						name: 'L',
-					},
-					{
-						id: 5,
-						pid: 1,
-						name: 'XL',
-					},
-					{
-						id: 6,
-						pid: 1,
-						name: 'XXL',
-					},
-					{
-						id: 7,
-						pid: 2,
-						name: '白色',
-					},
-					{
-						id: 8,
-						pid: 2,
-						name: '珊瑚粉',
-					},
-					{
-						id: 9,
-						pid: 2,
-						name: '草木绿',
-					},
-				]
+				imgList: [],
+				goodList:[],
+				desc: '',
+				specList: [],
+				specChildList: [],
+				selectGood: {
+					goodId: '',
+					title:'',// 商品名称
+					price:0.0,// 商品价格
+					discountPrice:0.0,// 优惠价格
+					couponTip:100,// 商品折扣
+					store:0,// 商品库存
+					sales:0,// 商品销量
+					defaultImage: ''// 默认图片的地址
+				},
+				pageViews: 0 //浏览量
 			};
 		},
 		async onLoad(options){
-			
-			//接收传值,id里面放的是标题，因为测试数据并没写id 
-			let id = options.id;
-			if(id){
-				this.$api.msg(`点击了${id}`);
-			}
-			
-			
-			//规格 默认选中第一条
-			this.specList.forEach(item=>{
-				for(let cItem of this.specChildList){
-					if(cItem.pid === item.id){
-						this.$set(cItem, 'selected', true);
-						this.specSelected.push(cItem);
-						break; //forEach不能使用break
-					}
-				}
-			})
+			this.loadGoodInfo(options.goodId);
 			this.shareList = await this.$api.json('shareList');
 		},
 		methods:{
+			loadGoodInfo(goodId){
+				let _this = this;
+				getGoodInfo({goodId:goodId}).then(res=>{
+					if(res.code==200){
+						console.log(JSON.stringify(res.obj))
+						// 获取轮换图的数据
+						_this.imgList = res.obj.carouselImagesList;
+						_this.specList = res.obj.specList;
+						_this.specChildList = res.obj.specChildList;
+						_this.goodList = res.obj.goodList;
+						_this.pageViews = res.obj.pageViews;
+						let descInfo = '<div style="width:100%">';
+						res.obj.productImages.forEach(p=>{
+							descInfo = descInfo + '<img style="width:100%;display:block;" src="http://127.0.0.1/fhp'+ p.image +'" />'
+						})
+						descInfo = descInfo + '</div>';
+						_this.desc = descInfo;
+						console.log('----' + _this.desc)
+						//规格 默认选中第一条
+						_this.specList.forEach(item=>{
+							for(let cItem of _this.specChildList){
+								console.log(cItem.productSpecsId + '---' + item.productSpecsId)
+								if(cItem.productSpecsId === item.productSpecsId){
+									_this.$set(cItem, 'selected', true);
+									_this.specSelected.push(cItem);
+									break; //forEach不能使用break
+								}
+							}
+						})
+					}
+				}).catch(err => {
+					this.$api.msg(err);
+				})
+			},
 			//规格弹窗开关
 			toggleSpec() {
 				if(this.specClass === 'show'){
@@ -302,10 +259,10 @@
 				}
 			},
 			//选择规格
-			selectSpec(index, pid){
+			selectSpec(index, productSpecsId){
 				let list = this.specChildList;
 				list.forEach(item=>{
-					if(item.pid === pid){
+					if(item.productSpecsId === productSpecsId){
 						this.$set(item, 'selected', false);
 					}
 				})
@@ -340,7 +297,25 @@
 			},
 			stopPrevent(){}
 		},
-
+        watch:{
+			specSelected(val){// 当商品规格发生变化的时候自动去更新商品信息
+				let spec = '';
+				for(let i=0;i<val.length;i++){
+					if(i==0){
+						spec = val[i].productSpecsDetailId;
+					}else{
+						spec = spec + ',' + val[i].productSpecsDetailId;
+					}
+				}
+				this.goodList.forEach(g=>{
+					if(g.goodNorms==spec){
+						this.selectGood = g;
+						this.imgList = g.imageList;
+						console.log('-----'+JSON.stringify(this.imgList))
+					}
+				});
+			}
+		}
 	}
 </script>
 

@@ -52,8 +52,25 @@ public class Product {
     @Column(name = "specsJson")
     private String specsJson;
 
+    /**
+     * 创建时间
+     */
     @Column(name = "crtDate")
     private Date crtDate;
+
+    /**
+     * 商品ID
+     */
+    @Column(name = "goodId")
+    private String goodId;
+
+    public String getGoodId() {
+        return goodId;
+    }
+
+    public void setGoodId(String goodId) {
+        this.goodId = goodId;
+    }
 
     public Integer getTotalSales() {
         return totalSales;

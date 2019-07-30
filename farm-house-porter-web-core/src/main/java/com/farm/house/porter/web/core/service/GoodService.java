@@ -4,10 +4,7 @@ import com.farm.house.porter.web.core.base.Page;
 import com.farm.house.porter.web.core.base.ReturnInfo;
 import com.farm.house.porter.web.core.base.SystemStaticConst;
 import com.farm.house.porter.web.core.constant.ImageConstant;
-import com.farm.house.porter.web.core.dao.DescInfoDao;
-import com.farm.house.porter.web.core.dao.GoodDao;
-import com.farm.house.porter.web.core.dao.ImageDao;
-import com.farm.house.porter.web.core.dao.ProductDao;
+import com.farm.house.porter.web.core.dao.*;
 import com.farm.house.porter.web.core.entity.Good;
 import com.farm.house.porter.web.core.entity.Product;
 import com.farm.house.porter.web.core.util.PageUtil;
@@ -54,6 +51,18 @@ public class GoodService {
     private DescInfoDao descInfoDao;
 
     /**
+     * 产品规格
+     */
+    @Autowired
+    private ProductSpecsDao productSpecsDao;
+
+    /**
+     * 产品规格明细的dao
+     */
+    @Autowired
+    private ProductSpecsDetailDao productSpecsDetailDao;
+
+    /**
      * 功能描述：根据商品ID来获取商品数据
      *
      * @param goodId 商品ID
@@ -64,19 +73,21 @@ public class GoodService {
         if (good == null) {
             return new ReturnInfo(SystemStaticConst.FAIL, "查无此商品数据");
         }
-        Product product = productDao.selectByPrimaryKey(good.getProduceId());
+        Product product = productDao.selectByPrimaryKey(good.getProductId());
         if (product == null) {
             return new ReturnInfo(SystemStaticConst.FAIL, "查无此产品数据");
         }
         GoodInfoVo goodInfoVo = new GoodInfoVo(good);
         // 获取产品规格信息
-        goodInfoVo.setSpecsJson(product.getSpecsJson());
+        goodInfoVo.setSpecList(productSpecsDao.getProductSpecsByProductId(product.getProductId()));
+        // 获取产品规格明细数据
+        goodInfoVo.setSpecChildList(productSpecsDetailDao.getProductSpecsDetailByProductId(product.getProductId()));
         // 获取产品浏览量
         goodInfoVo.setPageViews(product.getPageViews());
-        // 获取轮播图文信息
-        goodInfoVo.setCarouselImagesList(imageDao.queryImageById(good.getGoodId(), ImageConstant.TYPE_PROJECT_SHOW));
-        // 获取图片详情信息
-        goodInfoVo.setGoodImages(descInfoDao.queryProductImageById(product.getProductId()));
+        // 获取产品图片详情信息
+        goodInfoVo.setProductImages(descInfoDao.queryProductImageById(product.getProductId()));
+        // 获取商品明细
+        goodInfoVo.setGoodList(goodDao.queryGoodByProductId(product.getProductId()));
         return new ReturnInfo(SystemStaticConst.SUCCESS, "获取商品信息成功！", goodInfoVo);
     }
 

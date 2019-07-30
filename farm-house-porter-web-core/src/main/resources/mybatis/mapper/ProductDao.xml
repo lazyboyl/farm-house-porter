@@ -10,5 +10,6 @@
     <result column="state" jdbcType="VARCHAR" property="state" />
     <result column="specsJson" jdbcType="VARCHAR" property="specsJson" />
     <result column="crtDate" jdbcType="TIMESTAMP" property="crtDate" />
+    <result column="goodId" jdbcType="VARCHAR" property="goodId" />
   </resultMap>
 </mapper>

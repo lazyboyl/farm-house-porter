@@ -115,5 +115,17 @@
             <generatedKey column="imageId" sqlStatement="JDBC"/>
         </table>
 
+        <table tableName="t_product_specs" domainObjectName="ProductSpecs" mapperName="ProductSpecsDao">
+            <!-- 字段属性是否驼峰展示，true为驼峰展示 -->
+            <property name="useActualColumnNames" value="true"></property>
+            <generatedKey column="productSpecsId" sqlStatement="JDBC"/>
+        </table>
+
+        <table tableName="t_product_specs_detail" domainObjectName="ProductSpecsDetail" mapperName="ProductSpecsDetailDao">
+            <!-- 字段属性是否驼峰展示，true为驼峰展示 -->
+            <property name="useActualColumnNames" value="true"></property>
+            <generatedKey column="productSpecsDetailId" sqlStatement="JDBC"/>
+        </table>
+
     </context>
 </generatorConfiguration>

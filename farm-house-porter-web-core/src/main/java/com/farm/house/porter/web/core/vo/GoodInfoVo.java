@@ -1,8 +1,6 @@
 package com.farm.house.porter.web.core.vo;
 
-import com.farm.house.porter.web.core.entity.DescInfo;
-import com.farm.house.porter.web.core.entity.Good;
-import com.farm.house.porter.web.core.entity.Image;
+import com.farm.house.porter.web.core.entity.*;
 
 import java.util.List;
 
@@ -18,14 +16,14 @@ public class GoodInfoVo {
     }
 
     public GoodInfoVo(Good good) {
-       this.goodId = good.getGoodId();
-       this.title = good.getTitle();
-       this.price = good.getPrice();
-       this.discountPrice = good.getDiscountPrice();
-       this.couponTip = good.getCouponTip();
-       this.store = good.getStore();
-       this.sales = good.getSales();
-       this.goodNorms = good.getGoodNorms();
+        this.goodId = good.getGoodId();
+        this.title = good.getTitle();
+        this.price = good.getPrice();
+        this.discountPrice = good.getDiscountPrice();
+        this.couponTip = good.getCouponTip();
+        this.store = good.getStore();
+        this.sales = good.getSales();
+        this.goodNorms = good.getGoodNorms();
     }
 
     /**
@@ -79,15 +77,49 @@ public class GoodInfoVo {
     private String goodNorms;
 
     /**
-     * 轮播图文
+     * 图文详情
      */
-    private List<Image> carouselImagesList;
+    private List<DescInfo> productImages;
 
 
     /**
-     * 图文详情
+     * 产品规格
      */
-    private List<DescInfo> goodImages;
+    private List<ProductSpecs> specList;
+
+    /**
+     * 产品规格明细
+     */
+    private List<ProductSpecsDetail> specChildList;
+
+    /**
+     * 商品明细
+     */
+    private List<Good> goodList;
+
+    public List<Good> getGoodList() {
+        return goodList;
+    }
+
+    public void setGoodList(List<Good> goodList) {
+        this.goodList = goodList;
+    }
+
+    public List<ProductSpecs> getSpecList() {
+        return specList;
+    }
+
+    public void setSpecList(List<ProductSpecs> specList) {
+        this.specList = specList;
+    }
+
+    public List<ProductSpecsDetail> getSpecChildList() {
+        return specChildList;
+    }
+
+    public void setSpecChildList(List<ProductSpecsDetail> specChildList) {
+        this.specChildList = specChildList;
+    }
 
     public String getGoodNorms() {
         return goodNorms;
@@ -169,19 +201,11 @@ public class GoodInfoVo {
         this.specsJson = specsJson;
     }
 
-    public List<Image> getCarouselImagesList() {
-        return carouselImagesList;
+    public List<DescInfo> getProductImages() {
+        return productImages;
     }
 
-    public void setCarouselImagesList(List<Image> carouselImagesList) {
-        this.carouselImagesList = carouselImagesList;
-    }
-
-    public List<DescInfo> getGoodImages() {
-        return goodImages;
-    }
-
-    public void setGoodImages(List<DescInfo> goodImages) {
-        this.goodImages = goodImages;
+    public void setProductImages(List<DescInfo> productImages) {
+        this.productImages = productImages;
     }
 }

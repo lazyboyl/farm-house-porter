@@ -4,6 +4,7 @@ import com.farm.house.porter.web.core.util.UuidGenId;
 import tk.mybatis.mapper.annotation.KeySql;
 
 import java.util.Date;
+import java.util.List;
 import javax.persistence.*;
 
 /**
@@ -74,8 +75,8 @@ public class Good {
     /**
      * 产品流水ID
      */
-    @Column(name = "produceId")
-    private String produceId;
+    @Column(name = "productId")
+    private String productId;
 
     /**
      * 商品状态
@@ -88,6 +89,20 @@ public class Good {
      */
     @Column(name = "publicTime")
     private Date publicTime;
+
+    /**
+     * 商品轮播图片集
+     */
+    @Transient
+    private List<Image> imageList;
+
+    public List<Image> getImageList() {
+        return imageList;
+    }
+
+    public void setImageList(List<Image> imageList) {
+        this.imageList = imageList;
+    }
 
     /**
      * 获取商品流水ID
@@ -255,19 +270,19 @@ public class Good {
     /**
      * 获取产品流水ID
      *
-     * @return produceId - 产品流水ID
+     * @return productId - 产品流水ID
      */
-    public String getProduceId() {
-        return produceId;
+    public String getProductId() {
+        return productId;
     }
 
     /**
      * 设置产品流水ID
      *
-     * @param produceId 产品流水ID
+     * @param productId 产品流水ID
      */
-    public void setProduceId(String produceId) {
-        this.produceId = produceId;
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 
     /**
