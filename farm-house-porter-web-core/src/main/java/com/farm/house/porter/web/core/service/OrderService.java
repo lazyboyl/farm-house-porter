@@ -93,8 +93,11 @@ public class OrderService {
             // 新增订单明细数据
             orderDetail = new OrderDetail(cartVo,order);
             orderDetailDao.insert(orderDetail);
-            // 删除购物车数据
-            cartDao.deleteByPrimaryKey(cartVo.getCartId());
+            // 若是由商品页面直接提交的订单是没有购物车ID的，因此不需要删除购物车
+            if(cartVo.getCartId()!=null && !"".equals(cartVo.getCartId())){
+                // 删除购物车数据
+                cartDao.deleteByPrimaryKey(cartVo.getCartId());
+            }
             // 减少商品库存
             goodDao.reduceGoodStore(cartVo.getNumber(),cartVo.getGoodId());
         }
