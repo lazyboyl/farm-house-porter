@@ -15,6 +15,13 @@ import java.util.List;
 public interface CartDao extends Mapper<Cart> {
 
     /**
+     * 功能描述：根据购物车的ID来获取购物车数据
+     * @param cartIds 购物车ID
+     * @return 返回查询结果
+     */
+    List<CartVo> getCartVoList(@Param("cartIds") String [] cartIds,@Param("userId")String userId);
+
+    /**
      * 功能描述：根据购物车ID和用户ID来删除购物车数据
      * @param cartId 购物车ID
      * @param userId 用户ID

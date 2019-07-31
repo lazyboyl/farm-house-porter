@@ -29,6 +29,18 @@ public class AddressService {
     private AddressDao addressDao;
 
     /**
+     * 功能描述：获取当前登录用户的默认地址
+     * @return 返回查询结果
+     */
+    public ReturnInfo getDefaultAddress(){
+        MallUser mallUser = MallUserInfo.getMallUser();
+        if (mallUser == null) {
+            return new ReturnInfo(SystemStaticConst.NOT_LOGIN, "用户未登录，请登录以后再操作！");
+        }
+        return new ReturnInfo(SystemStaticConst.SUCCESS, "获取默认地址成功！",addressDao.getDefaultAddress(mallUser.getUserId()));
+    }
+
+    /**
      * 功能描述： 删除地址
      * @param addressId 地址流水ID
      * @return 返回删除结果

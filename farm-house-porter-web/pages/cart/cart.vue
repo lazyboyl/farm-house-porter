@@ -85,6 +85,7 @@
 	} from 'vuex';
 	import uniNumberBox from '@/components/uni-number-box.vue'
 	import {getMyCartList,clearCart} from '../../api/cart/cart.api.js';
+	import {createOrder} from '../../api/order/api.order.js';
 	
 	export default {
 		components: {
@@ -233,23 +234,24 @@
 			},
 			//创建订单
 			createOrder(){
-				let list = this.cartList;
-				let goodsData = [];
-				list.forEach(item=>{
-					if(item.checked){
-						goodsData.push({
-							attr_val: item.attr_val,
-							number: item.number
-						})
+				let cartIds = "";
+				for(let i=0;i<this.cartList.length;i++){
+					if(i==0){
+						cartIds = this.cartList[i].cartId;
+					}else{
+						cartIds = cartIds + ',' + this.cartList[i].cartId;
 					}
+				}
+				createOrder({cartIds:cartIds}).then(res=>{
+					if(res.code==200){
+					    uni.navigateTo({
+					    	url: `/pages/order/createOrder?orderId=` + res.obj
+					    })
+					}
+					this.$api.msg(res.msg);
+				}).catch(err => {
+					this.$api.msg(err);
 				})
-
-				uni.navigateTo({
-					url: `/pages/order/createOrder?data=${JSON.stringify({
-						goodsData: goodsData
-					})}`
-				})
-				this.$api.msg('跳转下一页 sendData');
 			}
 		}
 	}

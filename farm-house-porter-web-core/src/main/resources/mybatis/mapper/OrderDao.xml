@@ -2,18 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.farm.house.porter.web.core.dao.OrderDao">
   <resultMap id="BaseResultMap" type="com.farm.house.porter.web.core.entity.Order">
-    <!--
-      WARNING - @mbg.generated
-    -->
     <id column="orderId" jdbcType="VARCHAR" property="orderId" />
     <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
     <result column="payTime" jdbcType="TIMESTAMP" property="payTime" />
     <result column="transportTime" jdbcType="TIMESTAMP" property="transportTime" />
     <result column="state" jdbcType="VARCHAR" property="state" />
-    <result column="orderDetailId" jdbcType="VARCHAR" property="orderDetailId" />
     <result column="totalPrice" jdbcType="DOUBLE" property="totalPrice" />
     <result column="crtUserId" jdbcType="VARCHAR" property="crtUserId" />
     <result column="goodNum" jdbcType="INTEGER" property="goodNum" />
     <result column="payType" jdbcType="VARCHAR" property="payType" />
+    <result column="payState" jdbcType="VARCHAR" property="payState" />
+    <result column="payFailNote" jdbcType="VARCHAR" property="payFailNote" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="concatName" jdbcType="VARCHAR" property="concatName" />
+    <result column="orderNote" jdbcType="VARCHAR" property="orderNote" />
   </resultMap>
 </mapper>

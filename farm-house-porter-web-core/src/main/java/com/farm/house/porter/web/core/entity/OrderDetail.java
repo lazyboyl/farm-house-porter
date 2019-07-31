@@ -1,12 +1,34 @@
 package com.farm.house.porter.web.core.entity;
 
 import com.farm.house.porter.web.core.util.UuidGenId;
+import com.farm.house.porter.web.core.vo.CartVo;
 import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.*;
 
+/**
+ * @author linzf
+ * @since 2019-07-31
+ * 类描述：订单明细的实体类
+ */
 @Table(name = "t_order_detail")
 public class OrderDetail {
+
+    public OrderDetail(){
+        super();
+    }
+
+    public OrderDetail(CartVo cartVo,Order order){
+        this.title = cartVo.getTitle();
+        this.attr = cartVo.getAttrVal();
+        this.detailPrice = cartVo.getDiscountPrice() * cartVo.getNumber();
+        this.goodId = cartVo.getGoodId();
+        this.image = cartVo.getImage();
+        this.number = cartVo.getNumber();
+        this.price = cartVo.getDiscountPrice();
+        this.orderId = order.getOrderId();
+    }
+
     /**
      * 订单明细流水ID
      */
@@ -56,6 +78,20 @@ public class OrderDetail {
      */
     @Column(name = "goodId")
     private String goodId;
+
+    /**
+     * 订单ID
+     */
+    @Column(name = "orderId")
+    private String orderId;
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
 
     /**
      * 获取订单明细流水ID

@@ -45,6 +45,11 @@
     </collection>
   </resultMap>
 
+  <!-- 减少商品的库存 -->
+  <update id="reduceGoodStore">
+    update t_good set store = store - #{number} where goodId = #{goodId}
+  </update>
+
   <!-- 根据产品ID来查询该产品底下的所有的商品 -->
   <select id="queryGoodByProductId" resultMap="GoodInfo">
     select TG.*,ti.* from t_good tg inner join t_image ti on tg.goodId = ti.goodId where ti.type = 1 and  productId = #{productId}

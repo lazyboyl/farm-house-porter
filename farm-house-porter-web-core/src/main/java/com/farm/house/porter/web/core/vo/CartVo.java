@@ -1,12 +1,15 @@
 package com.farm.house.porter.web.core.vo;
 
+import java.io.Serializable;
+
 /**
  * @author linzf
  * @since 2019-07-30
  * 类描述：购物车的实体VO
  */
-public class CartVo {
+public class CartVo implements Serializable {
 
+    private static final long serialVersionUID = -3659658437335444651L;
     /**
      * 购物车流水ID
      */

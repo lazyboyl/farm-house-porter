@@ -1,5 +1,10 @@
 import {fetch} from '../base.js'
 
+// 获取默认地址
+export const getDefaultAddress = params => {
+  return fetch('/address/getDefaultAddress',params);
+};
+
 // 删除地址
 export const deleteAddress = params => {
   return fetch('/address/deleteAddress',params);

@@ -15,6 +15,14 @@ import java.util.List;
 public interface GoodDao extends Mapper<Good> {
 
     /**
+     * 功能描述：减少商品的库存
+     * @param number 商品库存
+     * @param goodId 商品ID
+     * @return 返回操作的结果
+     */
+    int reduceGoodStore(@Param("number")Integer number,@Param("goodId")String goodId);
+
+    /**
      * 功能描述： 根据产品ID来查询产品底下的所有商品
      * @param productId 产品ID
      * @return 返回查询结果

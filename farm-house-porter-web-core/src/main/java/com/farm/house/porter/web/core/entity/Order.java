@@ -1,13 +1,38 @@
 package com.farm.house.porter.web.core.entity;
 
+import com.farm.house.porter.web.core.constant.OrderConstant;
 import com.farm.house.porter.web.core.util.UuidGenId;
+import com.farm.house.porter.web.core.vo.OrderVo;
 import tk.mybatis.mapper.annotation.KeySql;
 
 import java.util.Date;
 import javax.persistence.*;
 
+/**
+ * @author linzf
+ * @since 2019-07-31
+ * 类描述：订单的实体
+ */
 @Table(name = "t_order")
 public class Order {
+
+    public Order(){
+        super();
+    }
+
+    public Order(OrderVo orderVo,MallUser mallUser,Address address,String orderNote){
+        this.createTime = new Date();
+        this.state = OrderConstant.ORDER_STATE_WAIT_PAY;
+        this.totalPrice = orderVo.getTotalPrice();
+        this.crtUserId = mallUser.getUserId();
+        this.goodNum = orderVo.getGoodNum();
+        this.payState = OrderConstant.ORDER_PAY_STATE_WAIT_PAY;
+        this.address = address.getAddressName() + address.getArea();
+        this.mobile = address.getMobile();
+        this.concatName = address.getName();
+        this.orderNote = orderNote;
+    }
+
     /**
      * 订单流水ID
      */
@@ -40,11 +65,6 @@ public class Order {
     @Column(name = "state")
     private String state;
 
-    /**
-     * 订单明细ID
-     */
-    @Column(name = "orderDetailId")
-    private String orderDetailId;
 
     /**
      * 商品总价
@@ -69,6 +89,90 @@ public class Order {
      */
     @Column(name = "payType")
     private String payType;
+
+    /**
+     * 支付状态【1：待支付；5：支付成功；9：支付失败】
+     */
+    @Column(name = "payState")
+    private String payState;
+
+    /**
+     * 支付失败原因
+     */
+    @Column(name = "payFailNote")
+    private String payFailNote;
+
+    /**
+     * 收货地址
+     */
+    @Column(name = "address")
+    private String address;
+
+    /**
+     * 收货电话
+     */
+    @Column(name = "mobile")
+    private String mobile;
+
+    /**
+     * 收货人
+     */
+    @Column(name = "concatName")
+    private String concatName;
+
+    /**
+     * 订单备注
+     */
+    @Column(name = "orderNote")
+    private String orderNote;
+
+    public String getPayState() {
+        return payState;
+    }
+
+    public void setPayState(String payState) {
+        this.payState = payState;
+    }
+
+    public String getPayFailNote() {
+        return payFailNote;
+    }
+
+    public void setPayFailNote(String payFailNote) {
+        this.payFailNote = payFailNote;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getConcatName() {
+        return concatName;
+    }
+
+    public void setConcatName(String concatName) {
+        this.concatName = concatName;
+    }
+
+    public String getOrderNote() {
+        return orderNote;
+    }
+
+    public void setOrderNote(String orderNote) {
+        this.orderNote = orderNote;
+    }
 
     /**
      * 获取订单流水ID
@@ -160,23 +264,6 @@ public class Order {
         this.state = state;
     }
 
-    /**
-     * 获取订单明细ID
-     *
-     * @return orderDetailId - 订单明细ID
-     */
-    public String getOrderDetailId() {
-        return orderDetailId;
-    }
-
-    /**
-     * 设置订单明细ID
-     *
-     * @param orderDetailId 订单明细ID
-     */
-    public void setOrderDetailId(String orderDetailId) {
-        this.orderDetailId = orderDetailId;
-    }
 
     /**
      * 获取商品总价

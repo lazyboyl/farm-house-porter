@@ -14,6 +14,12 @@ import java.util.List;
 public interface AddressDao extends Mapper<Address> {
 
     /**
+     * 功能描述：获取当前登录用户的默认地址
+     * @return 返回查询结果
+     */
+    Address getDefaultAddress(@Param("userId")String userId);
+
+    /**
      * 功能描述：删除地址
      * @param addressId 地址流水ID
      * @param userId 用户ID

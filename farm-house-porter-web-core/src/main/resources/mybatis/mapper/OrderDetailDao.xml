@@ -2,9 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.farm.house.porter.web.core.dao.OrderDetailDao">
   <resultMap id="BaseResultMap" type="com.farm.house.porter.web.core.entity.OrderDetail">
-    <!--
-      WARNING - @mbg.generated
-    -->
     <result column="orderDetailId" jdbcType="VARCHAR" property="orderDetailId" />
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="price" jdbcType="DOUBLE" property="price" />
@@ -13,5 +10,6 @@
     <result column="detailPrice" jdbcType="DOUBLE" property="detailPrice" />
     <result column="attr" jdbcType="VARCHAR" property="attr" />
     <result column="goodId" jdbcType="VARCHAR" property="goodId" />
+    <result column="orderId" jdbcType="VARCHAR" property="orderId" />
   </resultMap>
 </mapper>

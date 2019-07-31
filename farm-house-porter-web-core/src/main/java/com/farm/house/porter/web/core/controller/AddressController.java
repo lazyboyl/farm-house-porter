@@ -27,6 +27,15 @@ public class AddressController {
     private AddressService addressService;
 
     /**
+     * 功能描述：获取当前登录用户的默认地址
+     * @return 返回查询结果
+     */
+    @PostMapping("getDefaultAddress")
+    public ReturnInfo getDefaultAddress(){
+        return addressService.getDefaultAddress();
+    }
+
+    /**
      * 功能描述： 删除地址
      * @param addressId 地址流水ID
      * @return 返回删除结果

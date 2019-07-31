@@ -122,7 +122,6 @@
 				],
 			};
 		},
-		
 		onLoad(options){
 			/**
 			 * 修复app端点击除全部订单外的按钮进入时不加载数据的问题
@@ -137,7 +136,6 @@
 				this.loadData()
 			}
 			// #endif
-			
 		},
 		 
 		methods: {

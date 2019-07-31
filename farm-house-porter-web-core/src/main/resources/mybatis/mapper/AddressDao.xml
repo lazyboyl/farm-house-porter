@@ -14,6 +14,11 @@
     <result column="updateUserId" jdbcType="VARCHAR" property="updateUserId" />
   </resultMap>
 
+  <!-- 获取当前登录用户的默认地址 -->
+  <select id="getDefaultAddress" resultMap="BaseResultMap">
+    select * from t_address where crtUserId = #{userId} and defaultAddress = '1'
+  </select>
+
   <!-- 删除地址信息 -->
   <delete id="deleteAddress">
     delete from t_address where addressId = #{addressId} and crtUserId = #{userId}
