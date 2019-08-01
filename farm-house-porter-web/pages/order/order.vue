@@ -30,9 +30,9 @@
 							<text class="time">{{item.createTime}}</text>
 							<text class="state" :style="{color: item.stateTipColor}">{{item.stateTip}}</text>
 							<text 
-								v-if="item.state===9" 
+								v-if="item.state==9" 
 								class="del-btn yticon icon-iconfontshanchu1"
-								@click="deleteOrder(index)"
+								@click="deleteOrder(item.orderId,index)"
 							></text>
 						</view>
 						
@@ -81,7 +81,7 @@
 	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
 	import empty from "@/components/empty";
 	import Json from '@/Json';
-	import {myOrderList} from '../../api/order/api.order.js';
+	import {myOrderList,cancelOrder,removeOrder} from '../../api/order/api.order.js';
 	
 	export default {
 		components: {
@@ -216,14 +216,28 @@
 				this.tabCurrentIndex = index;
 			},
 			//删除订单
-			deleteOrder(index){
-				uni.showLoading({
-					title: '请稍后'
-				})
-				setTimeout(()=>{
-					this.navList[this.tabCurrentIndex].orderList.splice(index, 1);
-					uni.hideLoading();
-				}, 600)
+			deleteOrder(orderId,index){
+				uni.showModal({
+					content: '是否删除该订单？',
+					success: (e)=>{
+						if(e.confirm){
+							uni.showLoading({
+								title: '请稍后'
+							})
+							removeOrder({
+								orderId:orderId
+							}).then(res=>{
+								if(res.code == 200){
+									this.navList[this.tabCurrentIndex].orderList.splice(index, 1);
+								}
+								this.$api.msg(res.msg);
+								uni.hideLoading();
+							}).catch(err => {
+								this.$api.msg(err);
+							})
+						}
+					}
+				});
 			},
 			//取消订单
 			cancelOrder(item){

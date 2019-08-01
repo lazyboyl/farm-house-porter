@@ -42,7 +42,7 @@
 
   <!-- 根据当前登录的用户来获取用户的地址列表 -->
   <select id="getMyAddressList" resultMap="BaseResultMap">
-    select * from t_address where crtUserId = #{userId}
+    select * from t_address where crtUserId = #{userId} order by defaultAddress desc
   </select>
 
 </mapper>

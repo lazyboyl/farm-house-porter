@@ -39,7 +39,7 @@
 
 			<view class="tj-sction">
 				<view class="tj-item">
-					<text class="num" @click="testClick">128.8</text>
+					<text class="num" @click="testClick">0</text>
 					<text>余额</text>
 				</view>
 				<view class="tj-item">
@@ -47,7 +47,7 @@
 					<text>优惠券</text>
 				</view>
 				<view class="tj-item">
-					<text class="num">20</text>
+					<text class="num">0</text>
 					<text>积分</text>
 				</view>
 			</view>

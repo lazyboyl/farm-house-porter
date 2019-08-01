@@ -1,5 +1,15 @@
 import {fetch} from '../base.js'
 
+// 取消订单
+export const cancelOrder = params => {
+  return fetch('/order/cancelOrder',params);
+};
+
+// 删除订单
+export const removeOrder = params => {
+  return fetch('/order/removeOrder',params);
+};
+
 // 我的订单列表
 export const myOrderList = params => {
   return fetch('/order/myOrderList',params);

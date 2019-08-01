@@ -78,7 +78,7 @@ public class OrderService {
         if(order == null){
             return new ReturnInfo(SystemStaticConst.FAIL, "查无此订单数据！");
         }
-        if(OrderConstant.ORDER_STATE_CLOSE.equals(order.getState())){
+        if(!OrderConstant.ORDER_STATE_CLOSE.equals(order.getState())){
             return new ReturnInfo(SystemStaticConst.FAIL, "只能删除已经取消的订单！");
         }
         // 删除订单数据
