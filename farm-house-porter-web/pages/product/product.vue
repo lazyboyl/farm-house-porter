@@ -180,6 +180,7 @@
 	import share from '@/components/share';
 	import {getGoodInfo} from '../../api/good/api.good.js';
 	import {addToCart} from '../../api/cart/cart.api.js';
+	import {directCreation} from '../../api/order/api.order.js';
 	
 	export default{
 		components: {
@@ -301,8 +302,16 @@
 				this.favorite = !this.favorite;
 			},
 			buy(){
-				uni.navigateTo({
-					url: `/pages/order/createOrder`
+				let _this = this;
+				directCreation({goodId:this.selectGood.goodId}).then(res=>{
+					if(res.code==200){
+						uni.navigateTo({
+							url: `/pages/order/createOrder?orderId=` + res.obj
+						})
+					}
+					_this.$api.msg(res.msg);
+				}).catch(err => {
+					_this.$api.msg(err);
 				})
 			},
 			stopPrevent(){}

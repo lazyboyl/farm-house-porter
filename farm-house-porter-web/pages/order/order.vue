@@ -27,7 +27,7 @@
 						class="order-item"
 					>
 						<view class="i-top b-b">
-							<text class="time">{{item.time}}</text>
+							<text class="time">{{item.createTime}}</text>
 							<text class="state" :style="{color: item.stateTipColor}">{{item.stateTip}}</text>
 							<text 
 								v-if="item.state===9" 
@@ -36,20 +36,20 @@
 							></text>
 						</view>
 						
-						<scroll-view v-if="item.goodsList.length > 1" class="goods-box" scroll-x>
+						<scroll-view v-if="item.orderDetail.length > 1" class="goods-box" scroll-x>
 							<view
-								v-for="(goodsItem, goodsIndex) in item.goodsList" :key="goodsIndex"
+								v-for="(goodsItem, goodsIndex) in item.orderDetail" :key="goodsIndex"
 								class="goods-item"
 							>
-								<image class="goods-img" :src="goodsItem.image" mode="aspectFill"></image>
+								<image class="goods-img" :src="'http://127.0.0.1/fhp' + goodsItem.image" mode="aspectFill"></image>
 							</view>
 						</scroll-view>
 						<view 
-							v-if="item.goodsList.length === 1" 
+							v-if="item.orderDetail.length === 1" 
 							class="goods-box-single"
-							v-for="(goodsItem, goodsIndex) in item.goodsList" :key="goodsIndex"
+							v-for="(goodsItem, goodsIndex) in item.orderDetail" :key="goodsIndex"
 						>
-							<image class="goods-img" :src="goodsItem.image" mode="aspectFill"></image>
+							<image class="goods-img" :src="'http://127.0.0.1/fhp' + item.orderDetail[0].image" mode="aspectFill"></image>
 							<view class="right">
 								<text class="title clamp">{{goodsItem.title}}</text>
 								<text class="attr-box">{{goodsItem.attr}}  x {{goodsItem.number}}</text>
@@ -59,13 +59,13 @@
 						
 						<view class="price-box">
 							共
-							<text class="num">7</text>
+							<text class="num">{{item.goodNum}}</text>
 							件商品 实付款
-							<text class="price">143.7</text>
+							<text class="price">{{item.totalPrice}}</text>
 						</view>
-						<view class="action-box b-t" v-if="item.state != 9">
+						<view class="action-box b-t" v-if="item.state == 1 || item.state == 2">
 							<button class="action-btn" @click="cancelOrder(item)">取消订单</button>
-							<button class="action-btn recom">立即支付</button>
+							<button class="action-btn recom"  v-if="item.state == 1" >立即支付</button>
 						</view>
 					</view>
 					 
@@ -81,6 +81,8 @@
 	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
 	import empty from "@/components/empty";
 	import Json from '@/Json';
+	import {myOrderList} from '../../api/order/api.order.js';
+	
 	export default {
 		components: {
 			uniLoadMore,
@@ -92,30 +94,40 @@
 				navList: [{
 						state: 0,
 						text: '全部',
+						current: 1, // 当前页面
+						pageSize: 2,// 每次加载页数
 						loadingType: 'more',
 						orderList: []
 					},
 					{
 						state: 1,
 						text: '待付款',
+						current: 1, // 当前页面
+						pageSize: 2,// 每次加载页数
 						loadingType: 'more',
 						orderList: []
 					},
 					{
 						state: 2,
 						text: '待收货',
+						current: 1, // 当前页面
+						pageSize: 2,// 每次加载页数
 						loadingType: 'more',
 						orderList: []
 					},
 					{
 						state: 3,
 						text: '待评价',
+						current: 1, // 当前页面
+						pageSize: 2,// 每次加载页数
 						loadingType: 'more',
 						orderList: []
 					},
 					{
 						state: 4,
 						text: '售后',
+						current: 1, // 当前页面
+						pageSize: 2,// 每次加载页数
 						loadingType: 'more',
 						orderList: []
 					}
@@ -143,6 +155,7 @@
 			loadData(source){
 				//这里是将订单挂载到tab列表下
 				let index = this.tabCurrentIndex;
+				console.log(index+'*-----*')
 				let navItem = this.navList[index];
 				let state = navItem.state;
 				
@@ -154,29 +167,43 @@
 					//防止重复加载
 					return;
 				}
+				if(navItem.loadingType === 'nomore'){
+					this.$api.msg('没有更多的订单了');
+					//没有更多的数据了
+					return;
+				}
 				
 				navItem.loadingType = 'loading';
-				
-				setTimeout(()=>{
-					let orderList = Json.orderList.filter(item=>{
-						//添加不同状态下订单的表现形式
-						item = Object.assign(item, this.orderStateExp(item.state));
-						//演示数据所以自己进行状态筛选
-						if(state === 0){
-							//0为全部订单
-							return item;
+				let current = navItem.current;
+				let pageSize = navItem.pageSize;
+				myOrderList({
+					"current": current, // 第几页
+					"pageSize": pageSize,// 每页加载多少条数据
+					"state": state// 需要查询的订单的状态
+				}).then(res=>{
+					if(res.code==200){
+						let orderList = res.obj.rows.filter(item=>{
+						  //添加不同状态下订单的表现形式
+						  item = Object.assign(item, this.orderStateExp(item.state));
+						  return item;
+					    });
+						orderList.forEach(item=>{
+						   navItem.orderList.push(item);
+					    });
+						// 表示当前数据库已经没有数据了
+						if(navItem.current * navItem.pageSize >= res.obj.total){
+							navItem.loadingType = 'nomore';
+						}else{
+							navItem.current = navItem.current + 1;
+							navItem.loadingType = 'more';
 						}
-						return item.state === state
-					});
-					orderList.forEach(item=>{
-						navItem.orderList.push(item);
-					})
-					//loaded新字段用于表示数据加载完毕，如果为空可以显示空白页
-					this.$set(navItem, 'loaded', true);
-					
-					//判断是否还有数据， 有改为 more， 没有改为noMore 
-					navItem.loadingType = 'more';
-				}, 600);	
+						//loaded新字段用于表示数据加载完毕，如果为空可以显示空白页
+						this.$set(navItem, 'loaded', true);
+					}
+					this.$api.msg(res.msg);
+				}).catch(err => {
+					this.$api.msg(err);
+				})
 			}, 
 
 			//swiper 切换
@@ -229,6 +256,10 @@
 						stateTip = '待付款'; break;
 					case 2:
 						stateTip = '待发货'; break;
+					case 3:
+						stateTip = '待收货'; break;
+					case 4:
+						stateTip = '待售后'; break;
 					case 9:
 						stateTip = '订单已关闭'; 
 						stateTipColor = '#909399';

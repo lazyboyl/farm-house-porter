@@ -69,7 +69,7 @@
 				<text class="cell-tit clamp">运费</text>
 				<text class="cell-tip">免运费</text>
 			</view>
-			<view class="yt-list-cell desc-cell">
+			<view class="yt-list-cell desc-cell b-b">
 				<text class="cell-tit clamp">备注</text>
 				<input class="desc" type="text" v-model="orderNote" placeholder="请填写备注信息" placeholder-class="placeholder" />
 			</view>

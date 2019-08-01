@@ -1,5 +1,15 @@
 import {fetch} from '../base.js'
 
+// 我的订单列表
+export const myOrderList = params => {
+  return fetch('/order/myOrderList',params);
+};
+
+// 直接生成订单
+export const directCreation = params => {
+  return fetch('/order/directCreation',params);
+};
+
 // 提交订单
 export const submitOrder = params => {
   return fetch('/order/submitOrder',params);

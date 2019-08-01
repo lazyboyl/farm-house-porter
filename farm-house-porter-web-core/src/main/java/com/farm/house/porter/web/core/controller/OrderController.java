@@ -21,6 +21,48 @@ public class OrderController {
     private OrderService orderService;
 
     /**
+     * 功能描述：实现删除订单
+     * @param orderId 订单ID
+     * @return 返回删除结果
+     */
+    @PostMapping("removeOrder")
+    public ReturnInfo removeOrder(String orderId){
+        return orderService.removeOrder(orderId);
+    }
+
+    /**
+     * 功能描述：取消订单
+     * @param orderId 订单ID
+     * @return 返回处理结果
+     */
+    @PostMapping("cancelOrder")
+    public ReturnInfo cancelOrder(@RequestParam("orderId")String orderId){
+        return orderService.cancelOrder(orderId);
+    }
+
+    /**
+     * 功能描述：订单列表
+     * @param current 当前页面
+     * @param pageSize 每页显示条数
+     * @param state 订单状态
+     * @return 返回查询结果
+     */
+    @PostMapping("myOrderList")
+    public ReturnInfo myOrderList(@RequestParam("current")Integer current,@RequestParam("pageSize")Integer pageSize,@RequestParam("state")String state){
+        return orderService.myOrderList(current,pageSize,state);
+    }
+
+    /**
+     * 功能描述：直接生成订单
+     * @param goodId 商品ID
+     * @return 返回生成订单的结果
+     */
+    @PostMapping("directCreation")
+    public ReturnInfo directCreation(@RequestParam("goodId")String goodId){
+        return orderService.directCreation(goodId);
+    }
+
+    /**
      * 功能描述：提交订单
      *
      * @param orderId   订单ID

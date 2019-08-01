@@ -1,9 +1,11 @@
 package com.farm.house.porter.web.core.vo;
 
 
+import com.farm.house.porter.web.core.entity.Good;
 import com.farm.house.porter.web.core.util.UuidUtils;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,6 +19,25 @@ public class OrderVo implements Serializable {
 
     public OrderVo() {
         super();
+    }
+
+    public OrderVo(Good good){
+        this.orderId = UuidUtils.getUUID();
+        this.discountPrice = good.getPrice() - good.getDiscountPrice();
+        this.totalPrice = good.getDiscountPrice();
+        this.goodNum = 1;
+        List<CartVo> cartVoList = new ArrayList<>();
+        CartVo cartVo = new CartVo();
+        cartVo.setTitle(good.getTitle());
+        cartVo.setAttrVal(good.getGoodNorms());
+        cartVo.setDiscountPrice(good.getDiscountPrice());
+        cartVo.setGoodId(good.getGoodId());
+        cartVo.setImage(good.getDefaultImage());
+        cartVo.setNumber(1);
+        cartVo.setPrice(good.getPrice());
+        cartVo.setStore(good.getStore());
+        cartVoList.add(cartVo);
+        this.cartVoList = cartVoList;
     }
 
     public OrderVo(List<CartVo> cartVoList) {

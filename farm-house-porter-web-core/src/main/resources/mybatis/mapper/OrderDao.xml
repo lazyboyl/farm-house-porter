@@ -18,4 +18,58 @@
     <result column="concatName" jdbcType="VARCHAR" property="concatName" />
     <result column="orderNote" jdbcType="VARCHAR" property="orderNote" />
   </resultMap>
+
+  <!-- 订单列表的实体 -->
+  <resultMap id="MyOrderResultMap" type="com.farm.house.porter.web.core.vo.OrderListVo">
+    <id column="orderId" jdbcType="VARCHAR" property="orderId" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="transportTime" jdbcType="TIMESTAMP" property="transportTime" />
+    <result column="state" jdbcType="VARCHAR" property="state" />
+    <result column="totalPrice" jdbcType="DOUBLE" property="totalPrice" />
+    <result column="goodNum" jdbcType="INTEGER" property="goodNum" />
+    <collection property="orderDetail" ofType="com.farm.house.porter.web.core.entity.OrderDetail" javaType="java.util.ArrayList">
+      <result column="orderDetailId" jdbcType="VARCHAR" property="orderDetailId" />
+      <result column="title" jdbcType="VARCHAR" property="title" />
+      <result column="price" jdbcType="DOUBLE" property="price" />
+      <result column="image" jdbcType="VARCHAR" property="image" />
+      <result column="number" jdbcType="INTEGER" property="number" />
+      <result column="detailPrice" jdbcType="DOUBLE" property="detailPrice" />
+      <result column="attr" jdbcType="VARCHAR" property="attr" />
+      <result column="goodId" jdbcType="VARCHAR" property="goodId" />
+      <result column="orderId" jdbcType="VARCHAR" property="orderId" />
+    </collection>
+  </resultMap>
+
+  <!-- 根据订单ID来更新订单的状态 -->
+  <update id="updateMyOrderStateByOrderId">
+    update t_order set state = #{state} where orderId = #{orderId} and crtUserId = #{userId}
+  </update>
+
+  <!-- 删除我的订单 -->
+  <delete id="deleteMyOrderByOrderId">
+    delete from t_order where orderId = #{orderId} and crtUserId = #{userId}
+  </delete>
+
+  <!-- 获取我的订单数据 -->
+  <select id="getMyOrderByOrderId" resultMap="BaseResultMap">
+    select * from t_order where orderId = #{orderId} and crtUserId = #{userId}
+  </select>
+
+  <!-- 查询我的订单列表 -->
+  <select id="myOrderList" resultMap="MyOrderResultMap">
+     select o.*,od.* from t_order o inner join t_order_detail od on o.orderId = od.orderId where o.crtUserId = #{userId}
+     <if test="state!=null and state!= 0 ">
+       and o.state = #{state}
+     </if>
+  </select>
+
+  <!-- 统计我的订单列表 -->
+  <select id="myOrderList_COUNT" resultType="Long">
+    select count(*) from t_order o where o.crtUserId = #{userId}
+    <if test="state!=null and state!= 0 ">
+      and o.state = #{state}
+    </if>
+  </select>
+
+
 </mapper>

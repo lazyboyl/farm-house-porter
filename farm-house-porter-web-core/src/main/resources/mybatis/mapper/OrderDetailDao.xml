@@ -12,4 +12,9 @@
     <result column="goodId" jdbcType="VARCHAR" property="goodId" />
     <result column="orderId" jdbcType="VARCHAR" property="orderId" />
   </resultMap>
+
+  <!-- 删除我的订单的明细数据 -->
+  <delete id="deleteMyOrderDetailByOrderId">
+    delete from t_order_detail where orderId = #{orderId}
+  </delete>
 </mapper>

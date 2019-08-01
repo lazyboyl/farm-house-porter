@@ -1,20 +1,22 @@
 package com.farm.house.porter.web.core.service;
 
+import com.farm.house.porter.web.core.base.Page;
 import com.farm.house.porter.web.core.base.ReturnInfo;
 import com.farm.house.porter.web.core.base.SystemStaticConst;
+import com.farm.house.porter.web.core.constant.OrderConstant;
 import com.farm.house.porter.web.core.dao.*;
-import com.farm.house.porter.web.core.entity.Address;
-import com.farm.house.porter.web.core.entity.MallUser;
-import com.farm.house.porter.web.core.entity.Order;
-import com.farm.house.porter.web.core.entity.OrderDetail;
+import com.farm.house.porter.web.core.entity.*;
 import com.farm.house.porter.web.core.util.MallUserInfo;
+import com.farm.house.porter.web.core.util.PageUtil;
 import com.farm.house.porter.web.core.util.RedisCache;
 import com.farm.house.porter.web.core.vo.CartVo;
 import com.farm.house.porter.web.core.vo.OrderVo;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -61,6 +63,97 @@ public class OrderService {
      */
     @Autowired
     private RedisCache redisCache;
+
+    /**
+     * 功能描述：实现删除订单
+     * @param orderId 订单ID
+     * @return 返回删除结果
+     */
+    public ReturnInfo removeOrder(String orderId){
+        MallUser mallUser = MallUserInfo.getMallUser();
+        if (mallUser == null) {
+            return new ReturnInfo(SystemStaticConst.NOT_LOGIN, "用户未登录，请登录以后再操作！");
+        }
+        Order order = orderDao.getMyOrderByOrderId(mallUser.getUserId(),orderId);
+        if(order == null){
+            return new ReturnInfo(SystemStaticConst.FAIL, "查无此订单数据！");
+        }
+        if(OrderConstant.ORDER_STATE_CLOSE.equals(order.getState())){
+            return new ReturnInfo(SystemStaticConst.FAIL, "只能删除已经取消的订单！");
+        }
+        // 删除订单数据
+        orderDao.deleteMyOrderByOrderId(mallUser.getUserId(),orderId);
+        // 删除订单明细数据
+        orderDetailDao.deleteMyOrderDetailByOrderId(orderId);
+        return new ReturnInfo(SystemStaticConst.SUCCESS, "删除订单成功");
+    }
+
+    /**
+     * 功能描述：取消订单
+     * @param orderId 订单ID
+     * @return 返回处理结果
+     */
+    public ReturnInfo cancelOrder(String orderId){
+        MallUser mallUser = MallUserInfo.getMallUser();
+        if (mallUser == null) {
+            return new ReturnInfo(SystemStaticConst.NOT_LOGIN, "用户未登录，请登录以后再操作！");
+        }
+        Order order = orderDao.getMyOrderByOrderId(mallUser.getUserId(),orderId);
+        if(order == null){
+            return new ReturnInfo(SystemStaticConst.FAIL, "查无此订单数据！");
+        }
+        if(!OrderConstant.ORDER_STATE_WAIT_PAY.equals(order.getState())&&!OrderConstant.ORDER_STATE_WAIT_RECEIVE.equals(order.getState())){
+            return new ReturnInfo(SystemStaticConst.FAIL, "只能取消处于待收货以及待支付的订单！");
+        }
+        // 取消订单的时候将库存归还
+
+        // 若订单处于待支付状态则直接删除订单
+        if(OrderConstant.ORDER_STATE_WAIT_PAY.equals(order.getState())){
+            // 删除订单数据
+            orderDao.deleteMyOrderByOrderId(mallUser.getUserId(),orderId);
+            // 删除订单明细数据
+            orderDetailDao.deleteMyOrderDetailByOrderId(orderId);
+        }else{
+            orderDao.updateMyOrderStateByOrderId(mallUser.getUserId(),orderId,OrderConstant.ORDER_STATE_CLOSE);
+        }
+        return new ReturnInfo(SystemStaticConst.SUCCESS, "取消订单成功");
+    }
+
+    /**
+     * 功能描述：订单列表
+     * @param current 当前页面
+     * @param pageSize 每页显示条数
+     * @param state 订单状态
+     * @return 返回查询结果
+     */
+    public ReturnInfo myOrderList(Integer current,Integer pageSize,String state){
+        MallUser mallUser = MallUserInfo.getMallUser();
+        if (mallUser == null) {
+            return new ReturnInfo(SystemStaticConst.NOT_LOGIN, "用户未登录，请登录以后再操作！");
+        }
+        PageHelper.startPage(current, (pageSize > 0 && pageSize <= 500) ? pageSize : 20);
+        HashMap<String, Object> res = PageUtil.getResult(orderDao.myOrderList(mallUser.getUserId(),state));
+        return new ReturnInfo(SystemStaticConst.SUCCESS, "查询订单列表列表成功！", new Page((List) res.get("rows"), (long) res.get("total"), current, pageSize));
+    }
+
+    /**
+     * 功能描述：直接生成订单
+     * @param goodId 商品ID
+     * @return 返回生成订单的结果
+     */
+    public ReturnInfo directCreation(String goodId){
+        MallUser mallUser = MallUserInfo.getMallUser();
+        if (mallUser == null) {
+            return new ReturnInfo(SystemStaticConst.NOT_LOGIN, "用户未登录，请登录以后再操作！");
+        }
+        Good good = goodDao.selectByPrimaryKey(goodId);
+        if (good == null) {
+            return new ReturnInfo(SystemStaticConst.FAIL, "查无此商品数据！");
+        }
+        OrderVo orderVo = new OrderVo(good);
+        redisCache.setObject(orderVo.getOrderId(), orderVo, 1800);
+        return new ReturnInfo(SystemStaticConst.SUCCESS, "生成订单成功！", orderVo.getOrderId());
+    }
 
     /**
      * 功能描述：提交订单
