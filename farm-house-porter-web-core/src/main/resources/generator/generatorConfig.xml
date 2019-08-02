@@ -30,6 +30,11 @@
 
         <javaClientGenerator targetPackage="com.farm.house.porter.web.core.dao" targetProject="src/main/java"  type="XMLMAPPER"/>
 
+        <table tableName="t_Dict" domainObjectName="Dict" mapperName="DictDao">
+            <!-- 字段属性是否驼峰展示，true为驼峰展示 -->
+            <property name="useActualColumnNames" value="true"></property>
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
 
         <table tableName="t_address" domainObjectName="Address" mapperName="AddressDao">
             <!-- 字段属性是否驼峰展示，true为驼峰展示 -->

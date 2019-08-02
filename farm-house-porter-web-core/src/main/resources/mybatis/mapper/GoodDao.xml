@@ -45,6 +45,14 @@
     </collection>
   </resultMap>
 
+  <!-- 根据数据字典中配置的ID来查询商品数据 -->
+  <select id="queryGoodByGoodIds" resultMap="BaseResultMap" >
+    select * from t_good where goodId in
+    <foreach collection="goodList" item="dict" open="(" close=")" separator=",">
+      #{dict.dictValue}
+    </foreach>
+  </select>
+
   <!-- 减少商品的库存 -->
   <update id="reduceGoodStore">
     update t_good set store = store - #{number} where goodId = #{goodId}

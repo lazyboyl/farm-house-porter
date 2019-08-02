@@ -17,7 +17,7 @@
 			<text class="cate-item yticon icon-fenlei1" @click="toggleCateMask('show')"></text>
 		</view>
 		<view class="goods-list">
-			<view 
+			<view
 				v-for="(item, index) in goodsList" :key="index"
 				class="goods-item"
 				@click="navToDetailPage(item)"
@@ -33,25 +33,34 @@
 			</view>
 		</view>
 		<uni-load-more :status="loadingType"></uni-load-more>
-		
+
 		<view class="cate-mask" :class="cateMaskState===0 ? 'none' : cateMaskState===1 ? 'show' : ''" @click="toggleCateMask">
 			<view class="cate-content" @click.stop.prevent="stopPrevent" @touchmove.stop.prevent="stopPrevent">
 				<scroll-view scroll-y class="cate-list">
 					<view v-for="item in cateList" :key="item.id">
 						<view class="cate-item b-b two">{{item.name}}</view>
-						<view 
-							v-for="tItem in item.child" :key="tItem.id" 
-							class="cate-item b-b two-margin" 
+						<view v-for="tItem in item.child" :key="tItem.id">
+							<view
+								class="cate-item b-b two-margin"
 							
-							:class="{active: tItem.id==cateId}"
-							@click="changeCate(tItem)">
-							{{tItem.name}}
+								:class="{active: tItem.id==cateId}"
+								@click="changeCate(tItem)">
+								{{tItem.name}}
+							</view>
+							<view
+								v-for="cItem in tItem.child" :key="cItem.id"
+								class="cate-item b-b three-margin"
+								:class="{active: cItem.id==cateId}"
+								@click="changeCate(cItem)">
+								{{cItem.name}}
+							</view>
 						</view>
+						
 					</view>
 				</scroll-view>
 			</view>
 		</view>
-		
+
 	</view>
 </template>
 
@@ -61,7 +70,7 @@
 	import {loadCategory} from '../../api/category/api.category.js'
 	export default {
 		components: {
-			uniLoadMore	
+			uniLoadMore
 		},
 		data() {
 			return {
@@ -69,7 +78,7 @@
 				headerPosition:"fixed",
 				headerTop:"0px",
 				loadingType: 'more', //加载更多状态
-				filterIndex: 0, 
+				filterIndex: 0,
 				cateId: 0, //已选三级分类id
 				priceOrder: 0, //1 价格从低到高 2价格从高到低
 				cateList: [],
@@ -86,7 +95,15 @@
 			this.headerTop = document.getElementsByTagName('uni-page-head')[0].offsetHeight+'px';
 			// #endif
 			this.cateId = options.tid;
-			this.loadCateList(options.fid,options.sid);
+			let fid = options.fid;
+			if(fid==undefined||fid==''){
+				fid = 0;
+			}
+			let sid = options.sid;
+			if(sid==undefined||sid==''){
+				sid = 0;
+			}
+			this.loadCateList(fid,sid);
 			this.loadData();
 		},
 		onPageScroll(e){
@@ -115,6 +132,10 @@
 						let cateList = list.filter(item=>item.pId == fid);
 						cateList.forEach(item=>{
 							let tempList = list.filter(val=>val.pId == item.id);
+							tempList.forEach(c=>{
+								let cList = list.filter(val=>val.pId == c.id);
+								c.child = cList;
+							})
 							item.child = tempList;
 						})
 						_this.cateList = cateList;
@@ -134,7 +155,7 @@
 				}else{
 					this.loadingType = 'more'
 					// 若当前为重新刷新页面则页数重置
-					this.current = 1;	
+					this.current = 1;
 				}
 				//筛选，综合排序直接使用发布时间和商品的销量作为排序
 				if(this.filterIndex === 0){
@@ -335,7 +356,7 @@
 		background: rgba(0,0,0,0);
 		z-index: 95;
 		transition: .3s;
-		
+
 		.cate-content{
 			width: 630upx;
 			height: 100%;
@@ -349,7 +370,7 @@
 		}
 		&.show{
 			background: rgba(0,0,0,.4);
-			
+
 			.cate-content{
 				transform: translateX(0);
 			}
@@ -377,6 +398,9 @@
 		}
 		.two-margin{
 			margin-left: 10px;
+		}
+		.three-margin{
+			margin-left: 20px;
 		}
 		.active{
 			color: $base-color;
@@ -432,6 +456,6 @@
 			}
 		}
 	}
-	
+
 
 </style>

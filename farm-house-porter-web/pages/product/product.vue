@@ -188,6 +188,7 @@
 		},
 		data() {
 			return {
+				goodNorms:'',
 				specClass: 'none',
 				specSelected:[],
 				favorite: true,
@@ -237,16 +238,19 @@
 						_this.specChildList = res.obj.specChildList;
 						_this.goodList = res.obj.goodList;
 						_this.pageViews = res.obj.pageViews;
+						_this.goodNorms = res.obj.goodNorms;
 						let descInfo = '<div style="width:100%">';
 						res.obj.productImages.forEach(p=>{
 							descInfo = descInfo + '<img style="width:100%;display:block;" src="http://127.0.0.1/fhp'+ p.image +'" />'
 						})
 						descInfo = descInfo + '</div>';
 						_this.desc = descInfo;
-						//规格 默认选中第一条
-						_this.specList.forEach(item=>{
+						
+						let goodNorm = _this.goodNorms.split(',');
+                        // 加载项目的时候默认加载项目的默认商品						
+						goodNorm.forEach(productSpecsDetailId=>{
 							for(let cItem of _this.specChildList){
-								if(cItem.productSpecsId === item.productSpecsId){
+								if(cItem.productSpecsDetailId === productSpecsDetailId){
 									_this.$set(cItem, 'selected', true);
 									_this.specSelected.push(cItem);
 									break; //forEach不能使用break

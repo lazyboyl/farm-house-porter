@@ -3,7 +3,7 @@
 		<!-- 小程序头部兼容 -->
 		<!-- #ifdef MP -->
 		<view class="mp-search-box">
-			<input class="ser-input" type="text" value="输入关键字搜索" disabled />
+			<input class="ser-input" type="text" confirm-type="search" value="输入关键字搜索"  @confirm="queryProject" />
 		</view>
 		<!-- #endif -->
 
@@ -14,8 +14,8 @@
 			<!-- 背景色区域 -->
 			<view class="titleNview-background" :style="{backgroundColor:titleNViewBackground}"></view>
 			<swiper class="carousel" circular @change="swiperChange">
-				<swiper-item v-for="(item, index) in carouselList" :key="index" class="carousel-item" @click="navToDetailPage({title: '轮播广告'})">
-					<image :src="item.src" />
+				<swiper-item v-for="(item, index) in carouselList" :key="index" class="carousel-item" @click="navToDetailPage({goodId:item.goodId})">
+					<image :src="'http://127.0.0.1/fhp'+item.defaultImage" />
 				</swiper-item>
 			</swiper>
 			<!-- 自定义swiper指示器 -->
@@ -145,64 +145,20 @@
 			</view>
 			<text class="yticon icon-you"></text>
 		</view>
-		<view class="hot-floor">
+		<view class="hot-floor" v-for="(item, index) in goodsList" :key="index">
 			<view class="floor-img-box">
-				<image class="floor-img" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553409398864&di=4a12763adccf229133fb85193b7cc08f&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201703%2F19%2F20170319150032_MNwmn.jpeg" mode="scaleToFill"></image>
+				<image class="floor-img" :src="'http://127.0.0.1/fhp' + item.floorImg" mode="scaleToFill"></image>
 			</view>
 			<scroll-view class="floor-list" scroll-x>
 				<view class="scoll-wrapper">
 					<view
-						v-for="(item, index) in goodsList" :key="index"
+						v-for="(cItem, cIndex) in item.floorList" :key="cIndex"
 						class="floor-item"
-						@click="navToDetailPage(item)"
+						@click="navToDetailPage(cItem)"
 					>
-						<image :src="item.image" mode="aspectFill"></image>
-						<text class="title clamp">{{item.title}}</text>
-						<text class="price">￥{{item.price}}</text>
-					</view>
-					<view class="more">
-						<text>查看全部</text>
-						<text>More+</text>
-					</view>
-				</view>
-			</scroll-view>
-		</view>
-		<view class="hot-floor">
-			<view class="floor-img-box">
-				<image class="floor-img" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553409984228&di=dee176242038c2d545b7690b303d65ea&imgtype=0&src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2F5ef4da9f17faaf4612f0d5046f4161e556e9bbcfdb5b-rHjf00_fw658" mode="scaleToFill"></image>
-			</view>
-			<scroll-view class="floor-list" scroll-x>
-				<view class="scoll-wrapper">
-					<view
-						v-for="(item, index) in goodsList" :key="index"
-						class="floor-item"
-						@click="navToDetailPage(item)"
-					>
-						<image :src="item.image3" mode="aspectFill"></image>
-						<text class="title clamp">{{item.title}}</text>
-						<text class="price">￥{{item.price}}</text>
-					</view>
-					<view class="more">
-						<text>查看全部</text>
-						<text>More+</text>
-					</view>
-				</view>
-			</scroll-view>
-		</view>
-		<view class="hot-floor">
-			<view class="floor-img-box">
-				<image class="floor-img" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553409794730&di=12b840ec4f5748ef06880b85ff63e34e&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F01dc03589ed568a8012060c82ac03c.jpg%40900w_1l_2o_100sh.jpg" mode="scaleToFill"></image>
-			</view>
-			<scroll-view class="floor-list" scroll-x>
-				<view class="scoll-wrapper">
-					<view
-						v-for="(item, index) in goodsList" :key="index"
-						class="floor-item"
-						@click="navToDetailPage(item)"
-					>
-						<image :src="item.image2" mode="aspectFill"></image>
-						<text class="title clamp">{{item.title}}</text>
-						<text class="price">￥{{item.price}}</text>
+						<image :src="'http://127.0.0.1/fhp' + cItem.defaultImage" mode="aspectFill"></image>
+						<text class="title clamp">{{cItem.title}}</text>
+						<text class="price">￥{{cItem.discountPrice}}</text>
 					</view>
 					<view class="more">
 						<text>查看全部</text>
@@ -224,15 +180,15 @@
 
 		<view class="guess-section">
 			<view
-				v-for="(item, index) in goodsList" :key="index"
+				v-for="(item, index) in guessLikeList" :key="index"
 				class="guess-item"
 				@click="navToDetailPage(item)"
 			>
 				<view class="image-wrapper">
-					<image :src="item.image" mode="aspectFill"></image>
+					<image :src="'http://127.0.0.1/fhp' + item.defaultImage" mode="aspectFill"></image>
 				</view>
 				<text class="title clamp">{{item.title}}</text>
-				<text class="price">￥{{item.price}}</text>
+				<text class="price">￥{{item.discountPrice}}</text>
 			</view>
 		</view>
 
@@ -241,6 +197,7 @@
 </template>
 
 <script>
+	import {choiceType,loadCarouselList,guessYouLike} from '../../api/index/api.index.js';
 
 	export default {
 
@@ -250,26 +207,50 @@
 				swiperCurrent: 0,
 				swiperLength: 0,
 				carouselList: [],
-				goodsList: []
+				goodsList: [],
+				guessLikeList:[]
 			};
 		},
-
+        onShow(){
+			this.loadGuessYouLike();
+		},
 		onLoad() {
 			this.loadData();
 		},
 		methods: {
+			queryProject(value){
+				uni.navigateTo({
+					url: `/pages/product/list?fid=0&sid=0&fullPath=''`
+				})
+			},
+			loadGuessYouLike(){
+				let _this = this;
+				guessYouLike({}).then(res=>{
+					if(res.code ==200){
+						_this.guessLikeList = res.obj;
+					}
+				})
+			},
 			/**
 			 * 请求静态数据只是为了代码不那么乱
 			 * 分次请求未作整合
 			 */
 			async loadData() {
-				let carouselList = await this.$api.json('carouselList');
-				this.titleNViewBackground = carouselList[0].background;
-				this.swiperLength = carouselList.length;
-				this.carouselList = carouselList;
+				let _this = this;
+				loadCarouselList({}).then(res=>{
+					if(res.code ==200){
+						_this.swiperLength = res.obj.length;
+						_this.carouselList = res.obj;
+						_this.titleNViewBackground = _this.carouselList[0].background;
+					}
+				})
+				
+				choiceType({}).then(res=>{
+					if(res.code ==200){
+						_this.goodsList = res.obj || [];
+					}
+				})
 
-				let goodsList = await this.$api.json('goodsList');
-				this.goodsList = goodsList || [];
 			},
 			//轮播图切换修改背景色
 			swiperChange(e) {
@@ -280,9 +261,9 @@
 			//详情页
 			navToDetailPage(item) {
 				//测试数据没有写id，用title代替
-				let id = item.title;
+				let goodId = item.goodId;
 				uni.navigateTo({
-					url: `/pages/product/product?id=${id}`
+					url: `/pages/product/product?goodId=${goodId}`
 				})
 			},
 			// 跳转到分类页
